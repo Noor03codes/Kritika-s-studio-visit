@@ -177,8 +177,9 @@ body{
 }
 
 @media (max-width:767px){
-  #header-left{ opacity:0; 
-   .main-image { background:linear-gradient(to bottom, var(--ink) 55%, transparent 55%); }
+  #header-left{ opacity:0; }
+  .main-image{
+    background:linear-gradient(to bottom, var(--ink) 55%, transparent 55%);}
 }
 
 @media (min-width:768px){
