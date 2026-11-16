@@ -1,0 +1,967 @@
+@property --ink-rise{
+  syntax:"<percentage>";
+  inherits:false;
+  initial-value:-35%;
+}
+
+/* =========================================================
+   0. TOKENS
+   ========================================================= */
+:root{
+  /* Colour */
+  --paper: #F7F8F7;
+  --ink: #0A1629;
+  --blue: #134E8E;
+  --crimson: #8A152B;
+  --pink: #bd4a6d; ;
+
+  /* Grid rails + vertical rhythm */
+  --content-max:100rem;
+  --page-gutter:clamp(1rem, 3.5vw, 2.5rem);
+  --space-section:clamp(2.5rem,7vw,6.8rem);
+  --space-block:clamp(1rem,2vw + .5rem,1.6rem);
+  --header-gap:clamp(0.95rem,2.4vw,2rem);
+  --col-max:calc((var(--content-max) - 2 * var(--page-gutter)) / 20);
+  --rail-inline:max(var(--page-gutter), calc((100% - var(--content-max)) / 2 + var(--page-gutter)));
+
+  /* Type: tier 1 (display) */
+  --fs-hero:clamp(2.275rem,11.6vw,4.375rem);
+  --fs-question:clamp(1.85rem,8vw,3.15rem);
+  --lh-question:1.02;
+  --ls-question:-.034em;
+  /* Type: tier 2 (body, shared by .reading-block + .closeup-text) */
+  --fs-text:clamp(0.85rem,2.7vw,0.96rem);
+  --lh-text:1.44;
+  /* Type: tier 3 (meta + bio) */
+  --fs-meta:clamp(.5625rem,.45rem + .6vw,.875rem);
+  --fs-bio:clamp(0.76rem,2.3vw,0.85rem);
+  --lh-bio:1.26;
+  --track-meta:.1em;
+  --fs-credit:clamp(0.45rem, 0.36rem + 0.32vw, 0.65rem);
+
+  /* Stack roles — mobile: vertical cascade */
+  --stack-front:translateY(0) scale(1.12) rotate(0deg);
+  --stack-right:translateY(14%) scale(1.06) rotate(0deg);
+  --stack-left:translateY(28%) scale(1.0) rotate(0deg);
+  --stack-back:translateY(42%) scale(0.94) rotate(0deg);
+  --z-front:50;
+  --z-right:40;
+  --z-left:30;
+  --z-back:10;
+
+  /* Closeup stage (mobile) */
+  --closeup-h:clamp(19rem, 53vw, 25rem); /* [ARCH 4] */
+}
+
+
+/* =========================================================
+   1. BASE (single native scrollbar on html)
+   ========================================================= */
+*{
+  box-sizing:border-box;
+  margin:0;
+}
+
+html{
+  scrollbar-width:thin;
+  scrollbar-color:var(--blue) var(--paper);
+}
+
+html::-webkit-scrollbar{
+  width:5px;
+}
+
+html::-webkit-scrollbar-track{
+  background:var(--paper);
+}
+
+html::-webkit-scrollbar-thumb{
+  background:var(--blue);
+  border-radius:2px;
+}
+
+body{
+  background:var(--paper);
+  color:var(--blue);
+  font-family:'Gill Sans MT','Gill Sans',Calibri,sans-serif;
+  overflow-x:clip;
+}
+
+
+/* Master grid: full-bleed gutters + one content rail */
+.grid-container{
+  display:grid;
+  grid-template-columns:
+    [full-start] var(--page-gutter)
+    [content-start] minmax(0,1fr)
+    [content-end] var(--page-gutter)
+    [full-end];
+  width:100%;
+}
+
+.grid-container img{
+  display:block;
+  max-width:100%;
+}
+
+/* ---------- Keyframes (locked) ---------- */
+@keyframes reading-focus{
+  0%{ color:var(--blue); }
+  40%{ color:var(--accent); }
+  65%{ color:var(--accent); }
+  100%{ color:var(--blue); }}
+
+
+
+@keyframes heading-bleed-up{
+  0%{ --ink-rise:-15%; }
+  100%{ --ink-rise:105%; }
+}
+
+
+/* =========================================================
+   2. HEADER / MASTHEAD (mobile: overlays full-bleed hero)
+   ========================================================= */
+.box-header{
+  grid-column:full-start / full-end;
+  grid-row:1;
+  align-self:stretch;
+  position:relative;
+  z-index:2;
+  margin-bottom:var(--header-gap);
+  pointer-events:none;
+}
+
+#header-left{
+  position:absolute;
+  inset-inline:0;
+  bottom:calc(1.8rem - var(--header-gap));
+  text-align:center;
+  font-size:var(--fs-hero);
+  font-weight:400;
+  line-height:1;
+  letter-spacing:.01em;
+  white-space:nowrap;
+  color:var(--paper);
+}
+
+.header-subtitle,
+#detail{
+  position:absolute;
+  top:calc(100% + var(--header-gap) + .875rem);
+  font-size:var(--fs-meta);
+  letter-spacing:var(--track-meta);
+  text-transform:uppercase;
+  line-height:1.3;
+  color:var(--pink);
+  white-space:nowrap;
+}
+
+.header-subtitle{ left:var(--page-gutter); margin-left:0.18rem; }
+#detail{ right:var(--page-gutter); }
+
+/* ---------- Hero image (5:4 Architectural Cuboid, driven by Web Animations API) ---------- */
+/* ---------- Hero image (Native 50cqw 5:4 Cuboid, Zero-Glitch GPU) ---------- */
+.main-image{
+  grid-column:full-start / full-end;
+  grid-row:1;
+  position:relative;
+  z-index:1;
+  align-self:start;
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  min-width:0;
+  container-type:inline-size; /* Updates 50cqw synchronously on the exact frame the grid resizes */
+  background:transparent;
+  overflow:clip;
+}
+
+@media (max-width:767px){
+  #header-left{ opacity:0; }
+}
+
+@media (min-width:768px){
+  .main-image{
+    padding-block:var(--space-block);
+    margin-block:calc(var(--space-block) * -1);
+  }
+}
+
+.clipping-container1{ /* [ARCH 1] */
+  --half:50cqw;
+  position:relative;
+  width:100%;
+  aspect-ratio:5 / 4;
+  perspective:3200px;
+}
+
+.cuboid-pivot{
+  position:relative;
+  width:100%;
+  height:100%;
+  transform-style:preserve-3d;
+  animation:cuboid-turn 5s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
+}
+
+.hero-face{
+  position:absolute;
+  inset:0;
+  margin:0;
+  width:100%;
+  height:100%;
+  -webkit-backface-visibility:hidden;
+  backface-visibility:hidden;
+}
+
+.face-front{ transform:rotateY(0deg)   translateZ(var(--half)); }
+.face-right{ transform:rotateY(90deg)  translateZ(var(--half)); }
+.face-back{  transform:rotateY(180deg) translateZ(var(--half)); }
+
+@keyframes cuboid-turn{
+  0%, 18%{
+    transform:translate3d(0,0,calc(var(--half) * -1)) rotateY(0deg);
+  }
+  41%, 59%{
+    transform:translate3d(0,0,calc(var(--half) * -1)) rotateY(-90deg);
+  }
+  82%, 100%{
+    transform:translate3d(0,0,calc(var(--half) * -1)) rotateY(-180deg);
+  }
+}
+
+.mobile-face-title{
+  position:absolute;
+  inset-inline:0;
+  bottom:calc(1.8rem - var(--header-gap));
+  z-index:1;
+  text-align:center;
+  font-size:var(--fs-hero);
+  font-weight:400;
+  line-height:1;
+  letter-spacing:.01em;
+  white-space:nowrap;
+  color:var(--paper);
+  pointer-events:none;
+}
+
+@media (min-width:768px){
+  .mobile-face-title{ display:none; }
+}
+
+.image1{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+}
+
+.face-front .image1{ object-position:center 25%; }
+.face-back .image1{ object-position:center 20%; }
+
+
+
+/* =========================================================
+   3. QUESTION + BIO
+   ========================================================= */
+.image2-full{
+  grid-column:content-start / content-end;
+  grid-row:2;
+  min-width:0;
+  padding:calc(clamp(2.25rem,7vw,3.5rem) + var(--header-gap)) 0 0;
+}
+
+.image2-full .bio-text{
+  margin-top:.75rem;
+  font-size:var(--fs-bio);
+  line-height:var(--lh-bio);
+  letter-spacing:.005em;
+  text-align:justify;
+  color:var(--panel);
+}
+
+/* Fallback (no animation-timeline): solid steel-mid */
+.question{
+  display:block;
+  width:100%;
+  margin:0 0 .9em;
+  padding:0;
+  font-size:var(--fs-question);
+  font-weight:400;
+  line-height:var(--lh-question);
+  letter-spacing:var(--ls-question);
+  text-align:justify;
+  hyphens:none;
+  -webkit-hyphens:none;
+  color:var(--ink);
+}
+
+@supports (animation-timeline:scroll()) and ((background-clip:text) or (-webkit-background-clip:text)){
+  .question{
+    background:linear-gradient(
+      to top,
+      var(--blue) 0%,
+      var(--blue) var(--ink-rise),
+      var(--ink) calc(var(--ink-rise) + 20%),
+      var(--ink) 100%
+    );
+    background-size:100% 100%;
+    background-repeat:no-repeat;
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    -webkit-text-fill-color:transparent;
+    animation:heading-bleed-up linear both;
+    animation-timeline:scroll(root block);
+    animation-range:0% 12%;
+  }
+}
+
+
+@supports (animation-timeline:view()){
+  .reading-block{
+    animation:reading-focus linear both;
+    animation-timeline:view();
+    animation-range:entry 10% exit 60%;
+  }
+}
+
+
+/* =========================================================
+   4. ESSAY (.boxabout-visit) — mobile: blocks wrap the floated deck
+   ========================================================= */
+.boxabout-visit{
+  grid-column:content-start / content-end;
+  grid-row:3;
+  display:flow-root;               /* contains the floated deck */
+  padding:clamp(1.75rem,3.5vw,3.25rem) 0 0;
+}
+
+.reading-block{
+  max-width:none;
+  padding:0;
+  font-size:var(--fs-text);
+  line-height:var(--lh-text);
+  letter-spacing:0.01em;
+  text-align:justify;
+  text-align-last:left;
+  text-justify:newspaper;
+  hyphens:auto;
+  -webkit-hyphens:auto;
+  hyphenate-limit-chars:6 3 3;
+  text-wrap:pretty;
+  overflow-wrap:break-word;
+}
+
+.block-1{ clear:both; --accent:var(--pink); color:var(--blue); }
+.block-2{ clear:none; margin-top:var(--space-block); --accent:var(--crimson); color:var(--blue); }
+.block-3{ clear:none; margin-top:var(--space-block); --accent:var(--blue); color:var(--blue); }
+
+
+/* =========================================================
+   5. DECK MODULE: nav dots → card stack → info button + box
+   ========================================================= */
+.deck-container{
+  position:relative;
+  float:right;
+  width:45%;
+  min-width:0;
+  margin:clamp(.55rem,2vw,.9rem) 0 .85rem clamp(1rem,4vw,1.4rem);
+  padding:1.4rem 0 0;
+}
+
+.stack-wrapper{
+  position:relative;
+  isolation:isolate;
+  width:94%;
+  margin-top:7%;                   /* absorbs front-card scale overhang above */
+  margin-left:auto;
+  margin-bottom:48%;               /* absorbs cascade overhang below */
+  aspect-ratio:4 / 5;
+}
+
+/* card-1, card-2, card-4, card-5: identical 4 / 5 portrait frames */
+.stack-wrapper .layer{ /* [ARCH 5] */
+  position:absolute;
+  inset:0;
+  aspect-ratio:4 / 5;
+  transform-origin:center;
+  pointer-events:auto;
+  cursor:pointer;
+  backface-visibility:hidden;
+  transition:transform .55s cubic-bezier(.16,1,.3,1), z-index .55s step-start;
+}
+
+.stack-wrapper .layer img{ /* [ARCH 5] */
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  pointer-events:none;
+  user-select:none;
+}
+
+/* ---------- Nav dots (above the stack, visible at all breakpoints) ---------- */
+.deck-radio{
+  --n:0;
+  position:absolute;
+  top:.25rem;
+  right:calc(var(--n) * 1.1rem - .6rem);
+  z-index:60;
+  display:grid;
+  place-items:center;
+  min-width:24px;
+  min-height:24px;
+  width:1.5rem;
+  height:1.5rem;
+  margin:0;
+  padding:0;
+  appearance:none;
+  -webkit-appearance:none;
+  border:0;
+  border-radius:50%;
+  background:transparent;
+  opacity:.85;
+  cursor:pointer;
+  pointer-events:auto;
+}
+
+.deck-radio::after{
+  content:"";
+  width:.3rem;
+  height:.3rem;
+  border:1px solid var(--ink);  border-radius:50%;
+  background:transparent;
+}
+
+.deck-radio:checked::after{
+ background:var(--blue); border-color:var(--blue);
+}
+
+#slide-4{ --n:0; }
+#slide-5{ --n:1; }
+#slide-1{ --n:2; }
+#slide-2{ --n:3; }
+
+.deck-radio:focus-visible{
+  outline:none;
+}
+
+.deck-radio:focus-visible::after{
+  outline:1px solid var(--ink);
+  outline-offset:1px;
+}
+
+.art-info-checkbox:focus-visible ~ .art-info-btn,
+.art-info-btn:focus-visible{
+  outline:2px solid var(--pink);
+  outline-offset:2px;
+}
+
+/* ---------- Info button + box (in-flow, bottom of deck) ---------- */
+.art-info-row{
+  --btn-size:clamp(0.85rem,1.8vw,1.05rem);
+  --box-gap:clamp(.2rem,1.3vw,.75rem);
+  position:relative;
+  z-index:70;
+  display:flex;
+  flex-direction:row-reverse;
+  align-items:flex-start;
+  justify-content:flex-start;
+  gap:var(--box-gap);
+  width:auto;
+  max-width:100%;
+  margin-top:clamp(.35rem,1.2vw,.65rem);
+  margin-right:calc(-1 * clamp(0.25rem,1vw,0.45rem));
+  padding:0;
+}
+
+.art-info-checkbox{
+  position:absolute;
+  opacity:0;
+  pointer-events:none;
+}
+
+.art-info-btn{
+  flex:0 0 var(--btn-size);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:clamp(0.85rem,1.8vw,1.05rem);
+  height:clamp(0.85rem,1.8vw,1.05rem);
+  padding:0;
+  border:none;
+  border-radius:50%;
+  background:var(--blue);
+  box-shadow:none;
+  -webkit-appearance:none;
+  appearance:none;
+  -webkit-tap-highlight-color:transparent;
+  color:var(--paper);
+  font-family:Georgia,serif;
+  font-style:italic;
+  font-size:clamp(0.56rem,1.2vw,0.68rem);
+  font-weight:700;
+  line-height:1;
+  cursor:pointer;
+  user-select:none;
+}
+
+.art-info-box{
+  display:none;
+  flex:1 1 auto;
+  width:auto;
+  min-width:0;
+  max-width:calc(100% - var(--btn-size) - var(--box-gap));
+  margin-top:clamp(.75rem, 1.7vw, 1.15rem);
+  padding:clamp(.6rem,2.2vw,.85rem) clamp(.8rem,2.8vw,1.1rem);
+  border-radius:8px;
+  background:var(--blue);
+  color:var(--paper);
+  font-size:clamp(.68rem,2.1vw,.78rem);
+  line-height:1.4;
+  text-align:left;
+  overflow-wrap:anywhere;
+}
+
+.art-info-box .art-meta{ margin:0 0 .25rem; padding:0; color:var(--paper); }
+.art-info-box .art-desc{
+  margin:0;
+  padding:0;
+  color:var(--paper);
+  font-size:clamp(.65rem,2vw,.74rem);
+  line-height:1.4;
+}
+.art-info-box .art-item{ display:none; padding:0; }
+
+#slide-1:checked ~ .art-info-row .art-info-box .info-1,
+#slide-2:checked ~ .art-info-row .art-info-box .info-2,
+#slide-4:checked ~ .art-info-row .art-info-box .info-4,
+#slide-5:checked ~ .art-info-row .art-info-box .info-5{ display:block; }
+
+.art-info-checkbox:checked ~ .art-info-box{ display:block; }
+.art-info-checkbox:checked ~ .art-info-btn{ background:var(--blue); color:var(--paper); }
+
+/* ---------- Role-based states (locked) ---------- */
+#slide-1:checked ~ .stack-wrapper .card-1{ transform:var(--stack-front); z-index:var(--z-front); }
+#slide-1:checked ~ .stack-wrapper .card-5{ transform:var(--stack-right); z-index:var(--z-right); }
+#slide-1:checked ~ .stack-wrapper .card-4{ transform:var(--stack-left);  z-index:var(--z-left); }
+#slide-1:checked ~ .stack-wrapper .card-2{ transform:var(--stack-back);  z-index:var(--z-back); }
+
+#slide-2:checked ~ .stack-wrapper .card-2{ transform:var(--stack-front); z-index:var(--z-front); }
+#slide-2:checked ~ .stack-wrapper .card-1{ transform:var(--stack-right); z-index:var(--z-right); }
+#slide-2:checked ~ .stack-wrapper .card-5{ transform:var(--stack-left);  z-index:var(--z-left); }
+#slide-2:checked ~ .stack-wrapper .card-4{ transform:var(--stack-back);  z-index:var(--z-back); }
+
+#slide-4:checked ~ .stack-wrapper .card-4{ transform:var(--stack-front); z-index:var(--z-front); }
+#slide-4:checked ~ .stack-wrapper .card-5{ transform:var(--stack-right); z-index:var(--z-right); }
+#slide-4:checked ~ .stack-wrapper .card-1{ transform:var(--stack-left);  z-index:var(--z-left); }
+#slide-4:checked ~ .stack-wrapper .card-2{ transform:var(--stack-back);  z-index:var(--z-back); }
+
+#slide-5:checked ~ .stack-wrapper .card-5{ transform:var(--stack-front); z-index:var(--z-front); }
+#slide-5:checked ~ .stack-wrapper .card-4{ transform:var(--stack-right); z-index:var(--z-right); }
+#slide-5:checked ~ .stack-wrapper .card-1{ transform:var(--stack-left);  z-index:var(--z-left); }
+#slide-5:checked ~ .stack-wrapper .card-2{ transform:var(--stack-back);  z-index:var(--z-back); }
+
+/* =========================================================
+   6. CLOSEUP (full-bleed via grid tracks, overlay on rails)
+   Stage = [ image frame ] over [ credits, flush at the bottom ].
+   The image is bottom-locked, so it can never leave a gap
+   above the credits strip.
+   ========================================================= */
+.box-closeup{
+  grid-column:full-start / full-end;
+  grid-row:4;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  margin-top:calc(var(--space-section) + clamp(1rem, 3vw, 1.75rem)); /* [ARCH 4] */
+  background-color:var(--blue);
+}
+
+.closeup-container{
+  --hover-pan:0%;
+  position:relative;
+  flex:0 0 auto;
+  width:100%;
+  height:var(--closeup-h);
+  min-height:0;
+  background-color:var(--blue);
+  overflow:hidden;
+}
+
+/* [ARCH 4] Base + no-scroll-timeline fallback:
+   image rests flush at bottom:0 with a 54% top overflow buffer
+   (= 35.06% of image height) so pan + hover lift never expose a gap. */
+.closeup-container > img{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  display:block;
+  width:100%;
+  max-width:none;
+  height:154%;
+  object-fit:cover;
+  object-position:center bottom;
+  backface-visibility:hidden;
+  will-change:transform, translate;
+  /* Hover (driven by JS) uses the independent `translate` property,
+     scroll uses `transform` — they compose additively. */
+  translate:0 var(--hover-pan, 0%);
+  transition:translate .35s cubic-bezier(.16,1,.3,1);
+}
+
+/* [ARCH 4] Scroll-pan: 0% (bottom-locked rest) → 30% (5.06% buffer remains).
+   Hover adds at most 3.5% → total 33.5% < 35.06%. */
+@keyframes closeup-pan{
+  from{ transform:translate3d(0, 0%, 0); }
+  to{ transform:translate3d(0, 30%, 0); }
+}
+
+@supports (animation-timeline:scroll()){
+  .closeup-container > img{
+    animation:closeup-pan linear both;
+    animation-timeline:scroll(root block);
+    animation-range:70% 100%;
+  }
+}
+
+.closeup-text{
+  position:absolute;
+  top:clamp(1.5rem,5vw,3rem);
+  left:var(--rail-inline);
+  right:var(--rail-inline);
+  z-index:10;
+  max-width:40rem;
+  padding:clamp(.85rem,3vw,2rem) clamp(.95rem,4vw,3rem);
+  background:var(--blue);
+  color:var(--paper);
+  font-size:var(--fs-text);
+  font-weight:300;
+  line-height:var(--lh-text);
+  letter-spacing:.01em;
+  text-align:left;
+  hyphens:auto;
+  -webkit-hyphens:auto;
+}
+
+.closeup-credits{
+  position:relative;
+  flex:0 0 auto;
+  z-index:10;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:0.15rem;
+  width:100%;
+  padding:clamp(0.55rem, 1.3vw, 0.85rem) var(--rail-inline);
+  padding-bottom:calc(clamp(0.55rem, 1.3vw, 0.85rem) + env(safe-area-inset-bottom, 0px));
+  background:var(--ink);
+  color:var(--paper);
+  font-size:var(--fs-credit);
+  letter-spacing:var(--track-meta);
+  text-transform:uppercase;
+  line-height:1.25;
+  text-align:center;
+}
+
+.closeup-credits > *{
+  margin:0;
+  font:inherit;
+}
+
+
+/* =========================================================
+   7. TABLET + UP  (min-width: 768px)
+   ========================================================= */
+@media (min-width:768px){
+
+  :root{
+    --fs-hero:clamp(3.4rem,6.2vw,5.75rem);
+    --fs-question:clamp(1.9rem,4.1vw,3.1rem);
+    --lh-question:1.06;
+    --ls-question:-.02em;
+    --fs-text:clamp(0.92rem,1.4vw,1rem);
+    --fs-bio:clamp(.84rem,1.25vw,.96rem);
+    --lh-bio:1.2;
+    --space-section:clamp(1.75rem, 3.5vw, 3.25rem);
+    --closeup-h:clamp(22.5rem, 41vw, 30.5rem); /* [ARCH 4] */
+
+    /* Stack roles — tablet: calibrated vertical cascade */
+    --stack-front:translateY(0) scale(1.08) rotate(0deg);
+    --stack-right:translateY(11%) scale(1.04) rotate(0deg);
+    --stack-left:translateY(22%) scale(1.0) rotate(0deg);
+    --stack-back:translateY(33%) scale(0.95) rotate(0deg);
+  }
+
+  @supports (animation-timeline:view()){
+    .reading-block{ animation-range:entry 45% cover 90%; }
+  }
+
+  .grid-container{
+    grid-template-columns:
+      [full-start] minmax(var(--page-gutter),1fr)
+      [content-start] repeat(20,[col] minmax(0,var(--col-max)))
+      [content-end] minmax(var(--page-gutter),1fr)
+      [full-end];
+    grid-template-rows:auto auto auto auto;
+    align-items:start;
+    padding-top:clamp(1.06rem, 2.25vw, 2rem);
+    background:var(--paper);
+  }
+
+  /* ---------- Header: two tracks, left/right ---------- */
+  .box-header{
+    grid-column:content-start / content-end;
+    align-self:start;
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    column-gap:var(--space-block);
+    align-items:start;
+    margin-bottom:calc(var(--header-gap) + .75rem);
+    padding:0 0 .5rem;
+  }
+
+  #header-left{
+    position:static;
+    grid-column:1;
+    grid-row:1;
+    bottom:auto;
+    text-align:left;
+    font-weight:300;
+    color:var(--ink);
+  }
+
+  .header-subtitle,
+  #detail{
+    position:static;
+    top:auto;
+    margin-top:0.35rem; 
+    font-size:var(--fs-meta);
+  }
+
+  .header-subtitle{
+    grid-column:1;
+    grid-row:2;
+    padding:0;
+  }
+
+  #detail{
+    grid-column:2;
+    grid-row:1;
+    margin:.8em 0 0;
+    text-align:right;
+  }
+
+  /* ---------- Hero row: main-image is the master vertical boundary ---------- */
+  .clipping-container1{ /* [ARCH 1] */
+    aspect-ratio:5 / 4;
+  }
+
+  .main-image{ /* [ARCH 1] */
+    grid-column:col 1 / col 9;
+    grid-row:2;
+  }
+
+  .image2-full{ /* [ARCH 1] */
+    grid-column:col 9 / content-end;
+    grid-row:2;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    align-self:stretch;
+    gap:.5rem;
+    padding:0 0 0 var(--space-block);
+  }
+
+  .question{
+    display:block;
+    width:100%;
+    margin:0;
+    text-align:justify;
+    text-align-last:left;
+  }
+
+  .image2-full .bio-text{
+    width:100%;
+    margin:0 0 0 auto;
+    text-align:justify;
+    text-align-last:left;
+    letter-spacing:0.04em;
+    hyphens:auto;
+    -webkit-hyphens:auto;
+    hyphenate-limit-chars:6 3 2;
+  }
+
+  /* ---------- Essay: block-1 spans top; blocks 2+3 | deck module ---------- */
+  .boxabout-visit{ /* [ARCH 2] */
+    --stack-col:clamp(15.5rem, 23vw, 20.5rem);
+    --essay-gap:clamp(2.25rem, 4.5vw, 5.5rem);
+    grid-column:col 1 / content-end;
+    display:grid;
+    grid-template-columns:minmax(0,1fr) var(--stack-col);
+    grid-template-rows:auto auto auto 1fr;
+    align-items:start;
+    column-gap:var(--essay-gap);
+    row-gap:clamp(1.25rem,2.2vw,1.65rem);
+  }
+
+  .block-1,
+  .block-2,
+  .block-3{ margin:0; clear:none; }
+  .block-1{ grid-column:1 / -1; grid-row:1; }
+  .block-2{ grid-column:1; grid-row:2;align-self:center; }
+  .block-3{ grid-column:1; grid-row:3; }
+
+  .block-2,
+  .block-3{ line-height:1.52; }
+
+  .deck-container{ /* [ARCH 2] */
+    --stack-w:clamp(10.5rem, 15.5vw, 13.5rem);
+    float:none;
+    grid-column:2;
+    grid-row:2 / 4;
+    align-self:stretch;
+    width:100%;
+    margin:0;
+    padding:1rem 0 0;
+  }
+
+  .deck-radio{
+    top:-.6rem;
+    right:calc(var(--n) * 1.1rem - .6rem);
+  }
+
+  .stack-wrapper{ /* [ARCH 2] [ARCH 3] */
+    width:var(--stack-w);
+    margin-top:calc(var(--stack-w) * 0.08);
+    margin-right:auto;
+    margin-bottom:calc(var(--stack-w) * 0.36);
+    margin-left:calc(var(--stack-w) * 0.04);
+  }
+
+  .art-info-row{ /* [ARCH 3] */
+    width:100%;
+    flex-direction:column;
+    align-items:flex-start;
+    margin-top:calc(var(--stack-w) * 0.38);
+    margin-right:0;
+  }
+
+  .art-info-box{ /* [ARCH 3] */
+    position:relative;
+    top:auto;
+    left:auto;
+    width:100%;
+    max-width:100%;
+    height:auto;
+    margin-top:.6rem;
+    padding:.5rem .75rem;
+    font-size:.64rem;
+    line-height:1.38;
+    text-align:left;
+  }
+
+  .art-info-box .art-meta{
+    margin:0 0 .2rem;
+    font-size:.66rem;
+  }
+
+  .art-info-box .art-desc{
+    font-size:.61rem;
+    line-height:1.38;
+  }
+
+  /* ---------- Closeup ---------- */
+  .box-closeup{ /* [ARCH 4] */
+    margin-top:clamp(3.25rem, 5.5vw, 5rem);
+  }
+
+  .closeup-credits{
+    max-width:none;
+  }
+}
+
+/* =========================================================
+   8. DESKTOP  (min-width: 1025px)
+   ========================================================= */
+@media (min-width:1025px){
+
+  :root{
+    --fs-text:clamp(1.02rem,1.2vw,1.12rem);
+    --lh-text:1.3;
+    --fs-question:clamp(3.15rem,5vw,4.15rem);
+    --ls-question:-.025em;
+    --fs-bio:clamp(0.82rem,1.15vw,0.9rem);
+    --lh-bio:1.26;
+    --closeup-h:clamp(27.5rem, 39vw, 37.5rem); /* [ARCH 4] */
+
+    /* Stack roles — desktop: horizontal fan */
+    --stack-front:translate(0,0) scale(1.3) rotate(0.7deg);
+    --stack-right:translateX(10%) scale(1.2) rotate(5deg);
+    --stack-left:translateX(-10%) scale(1.2) rotate(-4deg);
+    --stack-back:translateY(6%) scale(1.2) rotate(3deg);
+  }
+
+  #header-left{ font-weight:500; }
+
+  .image2-full{
+    justify-content:space-between;
+    gap:clamp(1rem,2vw,1.75rem);
+    padding:0 0 0 var(--page-gutter);
+  }
+
+  .question{
+    display:block;
+    width:100%;
+    text-align:justify;
+    text-align-last:left;
+    hyphens:none;
+    -webkit-hyphens:none;
+  }
+
+  /* Essay */
+  .boxabout-visit{
+    margin-top:0.8%;
+    row-gap:0.12rem;
+  }
+
+  .reading-block{
+    max-width:none;
+    width:100%;
+    color:var(--slate);
+  }
+
+  .block-2,
+  .block-3{
+    max-width:95%;
+  }
+
+  .stack-wrapper{ /* [ARCH 2] [ARCH 3] */
+    margin-block:calc(var(--stack-w) * 0.16);
+    margin-left:calc(var(--stack-w) * 0.22);
+  }
+
+  .art-info-row{ /* [ARCH 3] */
+    margin-top:calc(var(--stack-w) * 0.22);
+  }
+}
+
+/* =========================================================
+   9. REDUCED MOTION (root level: applies to all breakpoints)
+   ========================================================= */
+@media (prefers-reduced-motion:reduce){
+  .question,
+  .reading-block,
+  .closeup-container > img{ animation:none; }
+  .closeup-container > img{ translate:none; transition:none; }
+  .stack-wrapper .layer{ transition:none; }
+
+  .face-right,
+  .face-back,
+  .mobile-face-title{ display:none; }
+  .face-front{ transform:none; } .cuboid-pivot { animation: none; }
+  #header-left{ opacity:1; }
+}
