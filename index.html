@@ -58,14 +58,11 @@
             How do materials alter what we perceive before we consciously interpret them?
         </p>
         <p class="bio-text">
-            <p class="bio-text">
               Kritika Goel (b. 1998, New Delhi) is a multimedia artist working across painting,
               installation, and digital media. She holds an MFA in Painting from Amity University,
               Noida, and has exhibited in group shows including <em>Mute/Unmute</em> at Method Kala Ghoda, Mumbai (2024), 
               <em>Ode to the Sun</em> at The Stainless Gallery, New Delhi (2024), and at Artbuzz Studios parallel to the India Art Fair.
               Her practice was documented during Interspace's curatorial research into emerging contemporary art in India.
-              </p>
-
         </p>
     </section>
 
@@ -102,14 +99,14 @@
 
                 <div class="art-info-box">
       <div class="art-item info-1">
-          <p class="art-meta"><strong>Detail of <em></em>If only I could find myself</em>, 2023</strong> · 
+          <p class="art-meta"><strong>Detail of <em>If only I could find myself</em>, 2023</strong> · 
            <br> 55 × 71 in</p>
         <p class="art-desc">Solid marker and paint pen on paper. Artist's collection, New Delhi.</p>
         </div>
 
       <div class="art-item info-2">
           <p class="art-meta"><strong>Field Record</strong> · 04.02.2026, New Delhi</p>
-          <p class="art-desc">Kritika Goel and Shankar Tripathi reviewing Gelly Roller ink drawings in the studio.</p>
+          <p class="art-desc">Kritika Goel and Shankar Tripathi reviewing artist's Gelly Roller Ink drawings in studio.</p>
           </div>
 
       <div class="art-item info-4">
@@ -132,7 +129,6 @@
         </p>
 
         <p class="reading-block block-3">
-                <p class="reading-block block-3">
         Fluorescent Gelly Roll Gel inks, industrial-grade solidified paint markers, translucent glass stains on silvered looking glass, and micro-prismatic retro-reflective tape enter this inquiry as materially distinct visual propositions. Chosen as much for their optical behaviors as their industrial utility—from the opaque, waxy drag of solid paint sticks and the floating depth of stained glass over a reflective ground, to tape engineered to bounce incident light directly back toward its source—they introduce calibrated shifts in glare, opacity, and spatial tension. The language may have changed from earlier digital works, but the underlying inquiry remains consistent: <mark class="optical-term">how a sense of distance, resonance, or misalignment might be held without collapse or resolution.</mark> Rather than supporting an image, these materials increasingly shape the terms through which the work is encountered.
         </p>
         </section>
@@ -164,27 +160,46 @@
 (() => {
   'use strict';
 
-  /* [ARCH 1] Zero-flicker 5:4 cuboid controller (in-place keyframe updates, no anim.cancel) */
+  /* [ARCH 1] Zero-flicker 5:4 cuboid controller.
+     Cuboid + 3 captions run on ONE shared clock: same duration, easing,
+     startTime, and the same observer / visibility / reduced-motion lifecycle. */
   const heroClip = document.querySelector('.clipping-container1');
   const heroPivot = heroClip && heroClip.querySelector('.cuboid-pivot');
   const faceFront = heroPivot && heroPivot.querySelector('.face-front');
   const faceRight = heroPivot && heroPivot.querySelector('.face-right');
   const faceBack  = heroPivot && heroPivot.querySelector('.face-back');
+  const caps = [...document.querySelectorAll('.cap-1, .cap-2, .cap-3')]; /* DOM order = cap-1, cap-2, cap-3 */
 
   if (heroClip && heroPivot && faceFront && faceRight && faceBack && typeof heroPivot.animate === 'function') {
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    let anim = null;
+    let anims = [];            /* [cuboid, cap-1, cap-2, cap-3] */
     let lastW = 0;
     let isVisible = true;
 
+    const CLOCK = {
+      duration: 6000,
+      easing: 'cubic-bezier(0.45, 0, 0.55, 1)',
+      iterations: Infinity,
+      direction: 'alternate'
+    };
+
+    /* Front 0deg + back -180deg hold 1.44s across the turnaround; middle -90deg holds 1.80s */
     const getFrames = (half) => ([
       { offset: 0,    transform: `translate3d(0,0,-${half}px) rotateY(0deg)` },
-      { offset: 0.18, transform: `translate3d(0,0,-${half}px) rotateY(0deg)` },
-      { offset: 0.41, transform: `translate3d(0,0,-${half}px) rotateY(-90deg)` },
-      { offset: 0.59, transform: `translate3d(0,0,-${half}px) rotateY(-90deg)` },
-      { offset: 0.82, transform: `translate3d(0,0,-${half}px) rotateY(-180deg)` },
+      { offset: 0.12, transform: `translate3d(0,0,-${half}px) rotateY(0deg)` },
+      { offset: 0.35, transform: `translate3d(0,0,-${half}px) rotateY(-90deg)` },
+      { offset: 0.65, transform: `translate3d(0,0,-${half}px) rotateY(-90deg)` },
+      { offset: 0.88, transform: `translate3d(0,0,-${half}px) rotateY(-180deg)` },
       { offset: 1,    transform: `translate3d(0,0,-${half}px) rotateY(-180deg)` }
     ]);
+
+    const capFrames = [
+      [{ offset: 0, opacity: 1 }, { offset: 0.12, opacity: 1 }, { offset: 0.35, opacity: 0 }, { offset: 1, opacity: 0 }],
+      [{ offset: 0, opacity: 0 }, { offset: 0.12, opacity: 0 }, { offset: 0.35, opacity: 1 }, { offset: 0.65, opacity: 1 }, { offset: 0.88, opacity: 0 }, { offset: 1, opacity: 0 }],
+      [{ offset: 0, opacity: 0 }, { offset: 0.65, opacity: 0 }, { offset: 0.88, opacity: 1 }, { offset: 1, opacity: 1 }]
+    ];
+
+    const setPlaying = (on) => anims.forEach((a) => (on ? a.play() : a.pause()));
 
     const syncGeometry = () => {
       if (motion.matches) return;
@@ -199,22 +214,23 @@
       faceRight.style.transform = `rotateY(90deg) translateZ(${seamSafeHalf}px)`;
       faceBack.style.transform  = `rotateY(180deg) translateZ(${seamSafeHalf}px)`;
 
-      if (!anim) {
-        anim = heroPivot.animate(getFrames(half), {
-          duration: 5000,
-          easing: 'cubic-bezier(0.45, 0, 0.55, 1)',
-          iterations: Infinity,
-          direction: 'alternate'
-        });
-        if (document.hidden || !isVisible) anim.pause();
-      } else if (anim.effect && typeof anim.effect.setKeyframes === 'function') {
-        anim.effect.setKeyframes(getFrames(half));
+      if (!anims.length) {
+        anims = [
+          heroPivot.animate(getFrames(half), CLOCK),
+          ...caps.map((el, i) => el.animate(capFrames[i], CLOCK))
+        ];
+        const t0 = document.timeline.currentTime;
+        anims.forEach((a) => { a.startTime = t0; });
+        if (document.hidden || !isVisible) setPlaying(false);
+      } else if (anims[0].effect && typeof anims[0].effect.setKeyframes === 'function') {
+        anims[0].effect.setKeyframes(getFrames(half));
       }
     };
 
     const applyMotion = () => {
       if (motion.matches) {
-        if (anim) { anim.cancel(); anim = null; }
+        anims.forEach((a) => a.cancel());
+        anims = [];
         lastW = 0;
         heroPivot.style.transform = 'none';
         faceFront.style.transform = 'none';
@@ -241,14 +257,14 @@
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(([entry]) => {
         isVisible = entry.isIntersecting;
-        if (!anim || document.hidden) return;
-        isVisible ? anim.play() : anim.pause();
+        if (!anims.length || document.hidden) return;
+        setPlaying(isVisible);
       }, { threshold: 0.05 }).observe(heroClip);
     }
 
     document.addEventListener('visibilitychange', () => {
-      if (!anim) return;
-      (document.hidden || !isVisible) ? anim.pause() : anim.play();
+      if (!anims.length) return;
+      setPlaying(!(document.hidden || !isVisible));
     });
 
     if (motion.addEventListener) motion.addEventListener('change', applyMotion);
@@ -319,8 +335,6 @@
   if (reduce.addEventListener) reduce.addEventListener('change', onMotionChange);
   else if (reduce.addListener) reduce.addListener(onMotionChange);
 })();
-
-
 </script>
 
 </body>
