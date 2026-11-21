@@ -13,6 +13,8 @@
   --ink: #0A1629;
   --blue: #134E8E;
   --crimson: #8A152B;
+  --panel: var(--blue);   /* alias: .bio-text */
+  --slate: var(--blue);   /* alias: .reading-block */
   --pink: #d05a7d; 
   --grey: #4f4f4f; ; --meta-minor: var(--grey);
 
@@ -128,73 +130,6 @@ body{
 }
 
 
-/* =========================================================
-   2. HEADER / MASTHEAD (mobile: overlays full-bleed hero)
-   ========================================================= */
-.box-header{
-  grid-column:full-start / full-end;
-  grid-row:1;
-  align-self:stretch;
-  position:relative;
-  z-index:2;
-  margin-bottom:var(--header-gap);
-  pointer-events:none;
-}
-
-#header-left{
-  position:absolute;
-  inset-inline:0;
-  bottom:calc(1.8rem - var(--header-gap));
-  text-align:center;
-  font-size:var(--fs-hero);
-  font-weight:400;
-  line-height:1;
-  letter-spacing:.01em;
-  white-space:nowrap;
-  color:var(--paper);
-}
-
-.header-subtitle,
-#detail{
-  position:absolute;
-  text-transform:uppercase;
-  color:var(--pink);
-  white-space:nowrap;
-}
-
-.header-subtitle{
-  top:calc(100% + 0.95rem);
-  left:var(--page-gutter);
-  right:auto;
-  margin-left:0.18rem;
-  font-size:var(--fs-subtitle);
-  font-weight:500;
-  letter-spacing:.06em;
-  line-height:1.2;
-}
-/* Spans full content rail from left gutter to right gutter on mobile */
-#detail{
-  top:calc(100% + var(--header-gap) + 2.35rem);
-  left:var(--page-gutter);
-  right:var(--page-gutter);
-  display:flex;
-  flex-direction:row;
-  justify-content:space-between;
-  align-items:baseline;
-  gap:0.4em;
-  font-size:var(--fs-meta);
-  font-weight:400;
-  letter-spacing:.03em;
-  line-height:1.35;
-  white-space:nowrap;
-  opacity:.85;
-}
-
-/* Remove separator dots since full-width distribution separates the 3 items cleanly */
-#detail span:not(:last-child)::after{
-  content:none;
-}
-
 
 /* =========================================================
    2. HEADER / MASTHEAD (mobile: overlays full-bleed hero)
@@ -231,7 +166,7 @@ body{
 }
 
 .header-subtitle{
-  top:calc(100% + var(--header-gap) + .98rem);
+  top:calc(100% + var(--header-gap) + 1.15rem);
   left:var(--page-gutter);
   right:auto;
   margin-left:0.18rem;
@@ -243,7 +178,7 @@ body{
 
 /* Spans full content rail from left gutter to right gutter on mobile */
 #detail{
-  top:calc(100% + var(--header-gap) + 2.35rem);
+  top:calc(100% + var(--header-gap) + 2.85rem);
   left:var(--page-gutter);
   right:var(--page-gutter);
   display:flex;
@@ -262,6 +197,15 @@ body{
 /* Remove separator dots since full-width distribution separates the 3 items cleanly */
 #detail span:not(:last-child)::after{
   content:none;
+}
+
+/* 320-360px: keep the 3 nowrap spans from touching */
+@media (max-width:360px){
+  #detail{
+    gap:0.3em;
+    letter-spacing:.01em;
+    font-size:clamp(0.46rem, 2.5vw, 0.54rem);
+  }
 }
 
 
@@ -300,13 +244,13 @@ body{
   width:100%;
   height:100%;
   transform-style:preserve-3d;
-  animation:cuboid-turn 5s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
+  animation:cuboid-turn 6s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
 }
 
 .cuboid-caption{
   position:relative;
   display:grid;
-  margin-top:0.35rem;
+  margin-top:0.4rem;
   padding-inline:var(--page-gutter);
   margin-left:0.18rem; /* matches .header-subtitle left edge */
   font-size:clamp(0.42rem, 0.35rem + 0.24vw, 0.56rem);
@@ -321,7 +265,7 @@ body{
 .cap-face{
   grid-area:1 / 1;
   opacity:0;
-  animation:5s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
+  animation:6s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
 }
 
 .cap-1{ animation-name:cap-front; }
@@ -329,19 +273,19 @@ body{
 .cap-3{ animation-name:cap-back; }
 
 @keyframes cap-front{
-  0%, 24%{ opacity:1; }
-  36%, 100%{ opacity:0; }
+  0%, 12%{ opacity:1; }
+  35%, 100%{ opacity:0; }
 }
 
 @keyframes cap-right{
-  0%, 28%{ opacity:0; }
-  38%, 62%{ opacity:1; }
-  72%, 100%{ opacity:0; }
+  0%, 12%{ opacity:0; }
+  35%, 65%{ opacity:1; }
+  88%, 100%{ opacity:0; }
 }
 
 @keyframes cap-back{
-  0%, 64%{ opacity:0; }
-  76%, 100%{ opacity:1; }
+  0%, 65%{ opacity:0; }
+  88%, 100%{ opacity:1; }
 }
 
 .hero-face{
@@ -359,13 +303,13 @@ body{
 .face-back{  transform:rotateY(180deg) translateZ(var(--half)); }
 
 @keyframes cuboid-turn{
-  0%, 18%{
+  0%, 12%{
     transform:translate3d(0,0,calc(var(--half) * -1)) rotateY(0deg);
   }
-  41%, 59%{
+  35%, 65%{
     transform:translate3d(0,0,calc(var(--half) * -1)) rotateY(-90deg);
   }
-  82%, 100%{
+  88%, 100%{
     transform:translate3d(0,0,calc(var(--half) * -1)) rotateY(-180deg);
   }
 }
@@ -416,7 +360,7 @@ body{
   grid-column:content-start / content-end;
   grid-row:2;
   min-width:0;
- padding:4.56rem 0 0;}
+ padding:5.1rem 0 0;}
 
 .image2-full .bio-text{
   margin-top:.75rem;
@@ -831,7 +775,7 @@ body{
 
   :root{
     --fs-hero:clamp(3.4rem,6.2vw,5.75rem);
-    --fs-question:clamp(1.9rem,4.1vw,3.1rem);
+    --fs-question:clamp(1.9rem,4.9vw,3.15rem);
     --lh-question:1.06;
     --ls-question:-.02em;
     --fs-text:clamp(0.92rem,1.4vw,1rem);
@@ -930,7 +874,8 @@ body{
     display:flex;
     flex-direction:column;
     justify-content:space-between;
-    align-self:stretch;
+    align-self:start;
+    aspect-ratio:15 / 8;   /* = cuboid height (0.8 x 8 cols) over this 12-col width; grows if content is taller */
     gap:.5rem;
     padding:0 0 0 var(--space-block);
   }
@@ -945,7 +890,7 @@ body{
 
   .image2-full .bio-text{
     width:100%;
-    margin:0 0 -1.5rem auto;
+    margin:0;
     text-align:justify; 
     text-align-last:left;
     letter-spacing:0.04em;
@@ -1138,6 +1083,8 @@ body{
   .closeup-container > img{ animation:none; }
   .closeup-container > img{ translate:none; transition:none; }
   .stack-wrapper .layer{ transition:none; }
+  .cap-face{ animation:none; }
+  .cap-1{ opacity:1; }
 
   .face-right,
   .face-back,
