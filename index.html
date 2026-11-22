@@ -125,7 +125,7 @@
         </div>
 
         <p class="reading-block block-2">
-        Beneath this formal discipline lies a matching rigor in how Kritika examines her own personhood. By refusing premature resolution and holding open the interval between personal choice and external reality, her visual intelligence reveals itself as a lived habit of perception<mark class="optical-term">—a mind actively working out how to exist and relate in real time.</mark> Rather than accepting inherited frameworks or settled meanings, she treats a baseline of nothingness as active ground for self-formation. Through an ongoing practice of relating to herself, her interiority, and her surroundings, she navigates the <mark class="optical-term"></mark>push and pull between meaninglessness and meaning-making.</mark> The raw sensory conditions she builds on the surface become the direct testing ground for this inner inquiry, turning a sharp attentiveness to resonance and dissonance into visible, critical evidence of a worldview in formation.
+        Beneath this formal discipline lies a matching rigor in how Kritika examines her own personhood. By refusing premature resolution and holding open the interval between personal choice and external reality, her visual intelligence reveals itself as a lived habit of perception<mark class="optical-term">—a mind actively working out how to exist and relate in real time.</mark> Rather than accepting inherited frameworks or settled meanings, she treats a baseline of nothingness as active ground for self-formation. Through an ongoing practice of relating to herself, her interiority, and her surroundings, she navigates the <mark class="optical-term">push and pull between meaninglessness and meaning-making.</mark> The raw sensory conditions she builds on the surface become the direct testing ground for this inner inquiry, turning a sharp attentiveness to resonance and dissonance into visible, critical evidence of a worldview in formation.
         </p>
 
         <p class="reading-block block-3">
@@ -157,6 +157,7 @@
 </div>
 
 <script>
+    
 (() => {
   'use strict';
 
@@ -335,7 +336,58 @@
   if (reduce.addEventListener) reduce.addEventListener('change', onMotionChange);
   else if (reduce.addListener) reduce.addListener(onMotionChange);
 })();
+
+
+document.addEventListener("click", function start() {
+  document.removeEventListener("click", start);
+
+  console.log("Recording mode armed");
+
+  // 8 seconds to start recording and move cursor away
+  setTimeout(() => {
+
+    window.scrollTo(0, 0);
+
+    // 15 second hero hold
+    setTimeout(() => {
+
+      const maxScroll =
+        Math.max(
+          document.documentElement.scrollHeight,
+          document.body.scrollHeight
+        ) - window.innerHeight;
+
+      const speed = 1.2; // slightly faster than before
+
+      function autoScroll() {
+        const currentY = window.scrollY;
+
+        if (currentY >= maxScroll - 2) {
+          window.scrollTo(0, maxScroll);
+
+          // hold credits/footer for 3 seconds
+          setTimeout(() => {
+            console.log("Recording sequence complete");
+          }, 3000);
+
+          return;
+        }
+
+        window.scrollBy(0, speed);
+        requestAnimationFrame(autoScroll);
+      }
+
+      requestAnimationFrame(autoScroll);
+
+    }, 15000);
+
+  }, 3000);
+
+}, { once: true });
+
+console.log("READY → Click once anywhere on the page.");
 </script>
 
-</body>
-</html>
+<script src="../node_modules/gsap/dist/gsap.min.js" defer></script>
+<script src="../node_modules/gsap/dist/ScrollTrigger.min.js" defer></script>
+<script src="animations.js" defer></script>
