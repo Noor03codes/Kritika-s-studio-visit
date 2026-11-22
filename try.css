@@ -13,10 +13,11 @@
   --ink: #0A1629;
   --blue: #134E8E;
   --crimson: #8A152B;
-  --panel: var(--blue);   /* alias: .bio-text */
-  --slate: var(--blue);   /* alias: .reading-block */
-  --pink: #d05a7d; 
-  --grey: #4f4f4f; ; --meta-minor: var(--grey);
+  --panel: var(--blue);
+  --slate: var(--blue);
+  --pink: #d05a7d;
+  --grey: #4f4f4f;
+  --meta-minor: var(--grey);
 
   /* Grid rails + vertical rhythm */
   --content-max:100rem;
@@ -28,23 +29,22 @@
   --rail-inline:max(var(--page-gutter), calc((100% - var(--content-max)) / 2 + var(--page-gutter)));
 
   /* Type: tier 1 (display) */
-   /* Section 0 (:root) */
   --fs-hero:clamp(2.275rem, 11.6vw, 4.375rem);
   --fs-question:clamp(1.85rem, 8vw, 3.15rem);
-
   --lh-question:1.02;
   --ls-question:-.034em;
-  /* Type: tier 2 (body, shared by .reading-block + .closeup-text) */
-  --fs-text:clamp(0.86rem, 2.5vw, 1.0rem);                 /* 13.8px -> 16px */
+
+  /* Type: tier 2 (body) */
+  --fs-text:clamp(0.86rem, 2.5vw, 1.0rem);
   --lh-text:1.44;
+
   /* Type: tier 3 (meta + bio) */
-  --fs-subtitle:clamp(0.99rem, 0.88rem + 0.45vw, 1.28rem); /* 15.4px -> 20.2px */
-  --fs-meta:clamp(0.54rem, 0.46rem + 0.24vw, 0.72rem);     /* 8.6px  -> 11.5px */
-  --fs-bio:clamp(0.76rem, 2.2vw, 0.85rem);                 /* 12.2px -> 13.6px */
+  --fs-subtitle:clamp(0.99rem, 0.88rem + 0.45vw, 1.28rem);
+  --fs-meta:clamp(0.54rem, 0.46rem + 0.24vw, 0.72rem);
+  --fs-bio:clamp(0.76rem, 2.2vw, 0.85rem);
   --lh-bio:1.26;
   --track-meta:.1em;
-  --fs-credit:clamp(0.45rem, 0.36rem + 0.32vw, 0.65rem);   /* 7.2px  -> 10.4px */
-
+  --fs-credit:clamp(0.45rem, 0.36rem + 0.32vw, 0.65rem);
 
   /* Stack roles — mobile: vertical cascade */
   --stack-front:translateY(0) scale(1.12) rotate(0deg);
@@ -57,12 +57,11 @@
   --z-back:10;
 
   /* Closeup stage (mobile) */
-  --closeup-h:clamp(19rem, 53vw, 25rem); /* [ARCH 4] */
+  --closeup-h:clamp(19rem, 53vw, 25rem);
 }
 
-
 /* =========================================================
-   1. BASE (single native scrollbar on html)
+   1. BASE
    ========================================================= */
 *{
   box-sizing:border-box;
@@ -94,8 +93,6 @@ body{
   overflow-x:clip;
 }
 
-
-/* Master grid: full-bleed gutters + one content rail */
 .grid-container{
   display:grid;
   grid-template-columns:
@@ -111,7 +108,7 @@ body{
   max-width:100%;
 }
 
-/* ---------- Keyframes (locked) ---------- */
+/* ---------- Keyframes ---------- */
 @keyframes reading-focus{
   0%{ color:var(--blue); }
   25%{ color:var(--blue); }
@@ -121,18 +118,8 @@ body{
   88%{ color:var(--blue); }
 }
 
-
-
-
-@keyframes heading-bleed-up{
-  0%{ --ink-rise:-15%; }
-  100%{ --ink-rise:105%; }
-}
-
-
-
 /* =========================================================
-   2. HEADER / MASTHEAD (mobile: overlays full-bleed hero)
+   2. HEADER / MASTHEAD
    ========================================================= */
 .box-header{
   grid-column:full-start / full-end;
@@ -169,14 +156,13 @@ body{
   top:calc(100% + var(--header-gap) + 1.15rem);
   left:var(--page-gutter);
   right:auto;
-  margin-left:0.18rem;
+  margin-left:0rem;
   font-size:var(--fs-subtitle);
   font-weight:500;
   letter-spacing:.06em;
   line-height:1.2;
 }
 
-/* Spans full content rail from left gutter to right gutter on mobile */
 #detail{
   top:calc(100% + var(--header-gap) + 2.85rem);
   left:var(--page-gutter);
@@ -194,12 +180,10 @@ body{
   opacity:.85;
 }
 
-/* Remove separator dots since full-width distribution separates the 3 items cleanly */
 #detail span:not(:last-child)::after{
   content:none;
 }
 
-/* 320-360px: keep the 3 nowrap spans from touching */
 @media (max-width:360px){
   #detail{
     gap:0.3em;
@@ -208,8 +192,7 @@ body{
   }
 }
 
-
-/* ---------- Hero image (Native 50cqw 5:4 Cuboid, Zero-Glitch GPU) ---------- */
+/* ---------- Hero Cuboid ---------- */
 .main-image{
   grid-column:full-start / full-end;
   grid-row:1;
@@ -219,8 +202,8 @@ body{
   display:grid;
   grid-template-columns:minmax(0,1fr);
   min-width:0;
-  container-type:inline-size; /* Updates 50cqw synchronously on the exact frame the grid resizes */
-  background:transparent; 
+  container-type:inline-size;
+  background:transparent;
   overflow:clip;
 }
 
@@ -231,7 +214,7 @@ body{
   }
 }
 
-.clipping-container1{ /* [ARCH 1] */
+.clipping-container1{
   --half:50cqw;
   position:relative;
   width:100%;
@@ -252,7 +235,7 @@ body{
   display:grid;
   margin-top:0.4rem;
   padding-inline:var(--page-gutter);
-  margin-left:0.18rem; /* matches .header-subtitle left edge */
+  margin-left:0rem;
   font-size:clamp(0.42rem, 0.35rem + 0.24vw, 0.56rem);
   font-weight:400;
   letter-spacing:.08em;
@@ -354,13 +337,14 @@ body{
 .face-back .image1{ object-position:center 20%; }
 
 /* =========================================================
-   3. QUESTION + BIO (top spacing below hero)
+   3. QUESTION + BIO
    ========================================================= */
 .image2-full{
   grid-column:content-start / content-end;
   grid-row:2;
   min-width:0;
- padding:5.1rem 0 0;}
+  padding:5.1rem 0 0;
+}
 
 .image2-full .bio-text{
   margin-top:.75rem;
@@ -371,7 +355,6 @@ body{
   color:var(--panel);
 }
 
-/* Fallback (no animation-timeline): solid steel-mid */
 .question{
   display:block;
   width:100%;
@@ -387,29 +370,6 @@ body{
   color:var(--ink);
 }
 
-@supports (animation-timeline:scroll()) and ((background-clip:text) or (-webkit-background-clip:text)){
-  .question{
-    background:linear-gradient(
-      to top,
-      var(--blue) 0%,
-      var(--blue) var(--ink-rise),
-      var(--ink) calc(var(--ink-rise) + 20%),
-      var(--ink) 100%
-    );
-    background-size:100% 100%;
-    background-repeat:no-repeat;
-    -webkit-background-clip:text;
-    background-clip:text;
-    color:transparent;
-    -webkit-text-fill-color:transparent;
-    animation:heading-bleed-up linear both;
-    animation-timeline:scroll(root block);
-    animation-range:0% 12%;
-  }
-}
-
-
-/* In Section 3 (@supports block — exact same timing/pace as before) */
 @supports (animation-timeline:view()){
   .reading-block{
     view-timeline-name:--para-flow;
@@ -428,14 +388,13 @@ body{
   color:inherit;
 }
 
-
 /* =========================================================
-   4. ESSAY (.boxabout-visit) — mobile: blocks wrap the floated deck
+   4. ESSAY (.boxabout-visit)
    ========================================================= */
 .boxabout-visit{
   grid-column:content-start / content-end;
   grid-row:3;
-  display:flow-root;               /* contains the floated deck */
+  display:flow-root;
   padding:clamp(1.75rem,3.5vw,3.25rem) 0 0;
 }
 
@@ -447,7 +406,6 @@ body{
   letter-spacing:0.01em;
   text-align:justify;
   text-align-last:left;
-  text-justify:newspaper;
   hyphens:auto;
   -webkit-hyphens:auto;
   hyphenate-limit-chars:6 3 3;
@@ -455,22 +413,16 @@ body{
   overflow-wrap:break-word;
 }
 
-.optical-term{
-  background:transparent;
-  color:inherit;
-}
-
 .block-1{ clear:both; color:var(--blue); }
 .block-2{ clear:none; margin-top:var(--space-block); color:var(--blue); }
 .block-3{ clear:none; margin-top:var(--space-block); color:var(--blue); }
 
-
-
 /* =========================================================
-   5. DECK MODULE: nav dots → card stack → info button + box
+   5. DECK MODULE
    ========================================================= */
 .deck-container{
   position:relative;
+  contain:layout style;
   float:right;
   width:45%;
   min-width:0;
@@ -482,14 +434,13 @@ body{
   position:relative;
   isolation:isolate;
   width:94%;
-  margin-top:7%;                   /* absorbs front-card scale overhang above */
+  margin-top:7%;
   margin-left:auto;
-  margin-bottom:48%;               /* absorbs cascade overhang below */
+  margin-bottom:48%;
   aspect-ratio:4 / 5;
 }
 
-/* card-1, card-2, card-4, card-5: identical 4 / 5 portrait frames */
-.stack-wrapper .layer{ /* [ARCH 5] */
+.stack-wrapper .layer{
   position:absolute;
   inset:0;
   aspect-ratio:4 / 5;
@@ -497,10 +448,10 @@ body{
   pointer-events:auto;
   cursor:pointer;
   backface-visibility:hidden;
-  transition:transform .55s cubic-bezier(.16,1,.3,1), z-index .55s step-start;
+  transition:transform .5s cubic-bezier(.25,1,.5,1), z-index .5s step-start;
 }
 
-.stack-wrapper .layer img{ /* [ARCH 5] */
+.stack-wrapper .layer img{
   display:block;
   width:100%;
   height:100%;
@@ -509,7 +460,7 @@ body{
   user-select:none;
 }
 
-/* ---------- Nav dots (above the stack, visible at all breakpoints) ---------- */
+/* ---------- Nav dots ---------- */
 .deck-radio{
   --n:0;
   position:absolute;
@@ -538,12 +489,14 @@ body{
   content:"";
   width:.3rem;
   height:.3rem;
-  border:1px solid var(--ink);  border-radius:50%;
+  border:1px solid var(--ink);
+  border-radius:50%;
   background:transparent;
 }
 
 .deck-radio:checked::after{
- background:var(--blue); border-color:var(--blue);
+  background:var(--blue);
+  border-color:var(--blue);
 }
 
 #slide-4{ --n:0; }
@@ -572,10 +525,10 @@ body{
   transition:margin-top .25s ease;
 }
 
-/* Slightly more space between stack and button when checked */
 .art-info-row:has(#art-info-toggle:checked){
   margin-top:clamp(.95rem, 2.4vw, 1.5rem);
 }
+
 .art-info-checkbox{
   position:absolute;
   width:1px;
@@ -584,7 +537,6 @@ body{
   opacity:0;
   pointer-events:none;
 }
-
 
 .art-info-btn{
   padding:0.15rem 0;
@@ -604,11 +556,9 @@ body{
 }
 
 .art-info-btn::after{ content:"WORK DETAILS +"; }
-.art-info-checkbox:checked ~ .art-info-btn{ color:var(--crimson);  border-bottom:1px solid var(--blue); }
+.art-info-checkbox:checked ~ .art-info-btn{ color:var(--crimson); border-bottom:1px solid var(--blue); }
 .art-info-checkbox:checked ~ .art-info-btn::after{ content:"CLOSE DETAILS −"; }
 
-
-/* Keep your original .art-info-box untouched */
 .art-info-box{
   display:none;
   width:100%;
@@ -632,7 +582,7 @@ body{
 
 .art-info-checkbox:checked ~ .art-info-box{ display:block; }
 
-/* ---------- Role-based states (locked) ---------- */
+/* ---------- Role-based states ---------- */
 #slide-1:checked ~ .stack-wrapper .card-1{ transform:var(--stack-front); z-index:var(--z-front); }
 #slide-1:checked ~ .stack-wrapper .card-5{ transform:var(--stack-right); z-index:var(--z-right); }
 #slide-1:checked ~ .stack-wrapper .card-4{ transform:var(--stack-left);  z-index:var(--z-left); }
@@ -654,10 +604,7 @@ body{
 #slide-5:checked ~ .stack-wrapper .card-2{ transform:var(--stack-back);  z-index:var(--z-back); }
 
 /* =========================================================
-   6. CLOSEUP (full-bleed via grid tracks, overlay on rails)
-   Stage = [ image frame ] over [ credits, flush at the bottom ].
-   The image is bottom-locked, so it can never leave a gap
-   above the credits strip.
+   6. CLOSEUP
    ========================================================= */
 .box-closeup{
   grid-column:full-start / full-end;
@@ -665,10 +612,9 @@ body{
   position:relative;
   display:flex;
   flex-direction:column;
-  margin-top:calc(var(--space-section) + clamp(1rem, 3vw, 1.75rem)); /* [ARCH 4] */
+  margin-top:calc(var(--space-section) + clamp(1rem, 3vw, 1.75rem));
   background-color:var(--blue);
 }
-
 
 .grid-container:has(#art-info-toggle:checked) .box-closeup{
   margin-top:clamp(1.6rem, 3.8vw, 2.5rem);
@@ -685,9 +631,6 @@ body{
   overflow:hidden;
 }
 
-/* [ARCH 4] Base + no-scroll-timeline fallback:
-   image rests flush at bottom:0 with a 54% top overflow buffer
-   (= 35.06% of image height) so pan + hover lift never expose a gap. */
 .closeup-container > img{
   position:absolute;
   left:0;
@@ -701,14 +644,10 @@ body{
   object-position:center bottom;
   backface-visibility:hidden;
   will-change:transform, translate;
-  /* Hover (driven by JS) uses the independent `translate` property,
-     scroll uses `transform` — they compose additively. */
   translate:0 var(--hover-pan, 0%);
   transition:translate .35s cubic-bezier(.16,1,.3,1);
 }
 
-/* [ARCH 4] Scroll-pan: 0% (bottom-locked rest) → 30% (5.06% buffer remains).
-   Hover adds at most 3.5% → total 33.5% < 35.06%. */
 @keyframes closeup-pan{
   from{ transform:translate3d(0, 0%, 0); }
   to{ transform:translate3d(0, 30%, 0); }
@@ -767,7 +706,6 @@ body{
   font:inherit;
 }
 
-
 /* =========================================================
    7. TABLET + UP  (min-width: 768px)
    ========================================================= */
@@ -782,7 +720,7 @@ body{
     --fs-bio:clamp(.84rem,1.25vw,.96rem);
     --lh-bio:1.2;
     --space-section:clamp(1.75rem, 3.5vw, 3.25rem);
-    --closeup-h:clamp(22.5rem, 41vw, 30.5rem); /* [ARCH 4] */
+    --closeup-h:clamp(22.5rem, 41vw, 30.5rem);
 
     /* Stack roles — tablet: calibrated vertical cascade */
     --stack-front:translateY(0) scale(1.08) rotate(0deg);
@@ -804,7 +742,7 @@ body{
   }
 
   /* ---------- Header: two tracks, left/right ---------- */
-    .box-header{
+  .box-header{
     grid-column:content-start / content-end;
     align-self:start;
     display:grid;
@@ -821,26 +759,32 @@ body{
     grid-row:1;
     bottom:auto;
     text-align:left;
+    inset-inline:auto;
+    justify-self:start;
+    min-height:1em;
+    text-indent:-0.06em;
     font-weight:400;
     color:var(--ink);
+    pointer-events:auto;
   }
 
-   .header-subtitle,
+  .header-subtitle,
   #detail{
     position:static;
     top:auto;
   }
 
-   .header-subtitle{
+  .header-subtitle{
     grid-column:1;
     grid-row:2;
+    justify-self:start;
+    width:fit-content;
     padding:0;
     margin-top:0.6rem;
     font-size:var(--fs-text);
     font-weight:500;
     letter-spacing:.05em;
   }
-
 
   #detail{
     grid-column:2;
@@ -857,25 +801,24 @@ body{
     letter-spacing:.05em;
   }
 
-
-  /* ---------- Hero row: main-image is the master vertical boundary ---------- */
-  .clipping-container1{ /* [ARCH 1] */
+  /* ---------- Hero row ---------- */
+  .clipping-container1{
     aspect-ratio:5 / 4;
   }
 
-  .main-image{ /* [ARCH 1] */
+  .main-image{
     grid-column:col 1 / col 9;
     grid-row:2;
   }
 
-   .image2-full{
+  .image2-full{
     grid-column:col 9 / content-end;
     grid-row:2;
     display:flex;
     flex-direction:column;
     justify-content:space-between;
     align-self:start;
-    aspect-ratio:15 / 8;   /* = cuboid height (0.8 x 8 cols) over this 12-col width; grows if content is taller */
+    aspect-ratio:15 / 8;
     gap:.5rem;
     padding:0 0 0 var(--space-block);
   }
@@ -891,7 +834,7 @@ body{
   .image2-full .bio-text{
     width:100%;
     margin:0;
-    text-align:justify; 
+    text-align:justify;
     text-align-last:left;
     letter-spacing:0.04em;
     hyphens:auto;
@@ -899,9 +842,8 @@ body{
     hyphenate-limit-chars:6 3 2;
   }
 
-
-  /* ---------- Essay: block-1 spans top; blocks 2+3 | deck module ---------- */
-  .boxabout-visit{ /* [ARCH 2] */
+  /* ---------- Essay ---------- */
+  .boxabout-visit{
     --stack-col:clamp(15.5rem, 23vw, 20.5rem);
     --essay-gap:clamp(2.25rem, 4.5vw, 5.5rem);
     grid-column:col 1 / content-end;
@@ -917,13 +859,13 @@ body{
   .block-2,
   .block-3{ margin:0; clear:none; }
   .block-1{ grid-column:1 / -1; grid-row:1; }
-  .block-2{ grid-column:1; grid-row:2;align-self:center; }
+  .block-2{ grid-column:1; grid-row:2; align-self:center; }
   .block-3{ grid-column:1; grid-row:3; }
 
   .block-2,
   .block-3{ line-height:1.52; }
 
-  .deck-container{ /* [ARCH 2] */
+  .deck-container{
     --stack-w:clamp(10.5rem, 15.5vw, 13.5rem);
     float:none;
     grid-column:2;
@@ -939,31 +881,32 @@ body{
     right:calc(var(--n) * 1.1rem - .6rem);
   }
 
-  .stack-wrapper{ /* [ARCH 2] [ARCH 3] */
+    .stack-wrapper{ /* [ARCH 2] [ARCH 3] */
     width:var(--stack-w);
     margin-top:calc(var(--stack-w) * 0.08);
     margin-right:auto;
     margin-bottom:calc(var(--stack-w) * 0.36);
-    margin-left:calc(var(--stack-w) * 0.04);
+    margin-left:calc(var(--stack-w) * 0.02);
   }
 
   .art-info-row:has(#art-info-toggle:checked){
-   margin-top:calc(var(--stack-w) * 0.42);
+    margin-top:calc(var(--stack-w) * 0.42);
   }
 
   .grid-container:has(#art-info-toggle:checked) .box-closeup{
     margin-top:clamp(1.5rem, 2.6vw, 2.25rem);
   }
 
-  .art-info-row{ /* [ARCH 3] */
-    width:100%;
+    .art-info-row{ /* [ARCH 3] */
+    width:calc(100% - var(--stack-w) * 0.02);
     flex-direction:column;
     align-items:flex-start;
-    margin-top:calc(var(--stack-w) * 0.44);
+    margin-top:calc(var(--stack-w) * 0.36);
+    margin-left:calc(var(--stack-w) * 0.02);
     margin-right:0;
   }
 
-  .art-info-box{ /* [ARCH 3] */
+  .art-info-box{
     position:relative;
     top:auto;
     left:auto;
@@ -988,7 +931,7 @@ body{
   }
 
   /* ---------- Closeup ---------- */
-  .box-closeup{ /* [ARCH 4] */
+  .box-closeup{
     margin-top:clamp(3.25rem, 5.5vw, 5rem);
   }
 
@@ -1006,15 +949,14 @@ body{
     --fs-question:clamp(3.15rem, 5vw, 4.15rem);
     --ls-question:-.025em;
 
-    --fs-subtitle:clamp(1.16rem, 1.38vw, 1.28rem); /* ~18.5px -> 20.5px (1.14x body) */
-    --fs-text:clamp(1.02rem, 1.2vw, 1.12rem);      /* ~16.3px -> 17.9px */
+    --fs-subtitle:clamp(1.16rem, 1.38vw, 1.28rem);
+    --fs-text:clamp(1.02rem, 1.2vw, 1.12rem);
     --lh-text:1.3;
-    --fs-bio:clamp(0.84rem, 1.05vw, 0.92rem);      /* ~13.4px -> 14.7px (0.82x body) */
+    --fs-bio:clamp(0.84rem, 1.05vw, 0.92rem);
     --lh-bio:1.26;
-    --fs-meta:clamp(0.64rem, 0.78vw, 0.72rem);     /* ~10.2px -> 11.5px (0.64x body) */
+    --fs-meta:clamp(0.64rem, 0.78vw, 0.72rem);
 
-    --closeup-h:clamp(27.5rem, 39vw, 37.5rem); /* [ARCH 4] */
-
+    --closeup-h:clamp(27.5rem, 39vw, 37.5rem);
 
     /* Stack roles — desktop: horizontal fan */
     --stack-front:translate(0,0) scale(1.3) rotate(0.7deg);
@@ -1030,10 +972,9 @@ body{
     padding:0 0 0 var(--page-gutter);
   }
 
-    #detail{
+  #detail{
     justify-content:space-between;
   }
-
 
   .question{
     display:block;
@@ -1063,22 +1004,28 @@ body{
 
   .stack-wrapper{ /* [ARCH 2] [ARCH 3] */
     margin-block:calc(var(--stack-w) * 0.16);
-    margin-left:calc(var(--stack-w) * 0.22);
+    margin-left:calc(var(--stack-w) * 0.02);
   }
 
+  /* Front card is scale(1.3) about its centre, so its visual left edge sits
+     at stack-left - 0.15w. With the wrapper's 0.02w margin that is -0.13w
+     from the column edge. The row spans the print's visual width and is
+     capped so its right edge never passes --stack-col. */
   .art-info-row{ /* [ARCH 3] */
-    margin-top:calc(var(--stack-w) * 0.26);
+    width:min(calc(var(--stack-w) * 1.3), calc(100% + var(--stack-w) * 0.13));
+    margin-top:calc(var(--stack-w) * 0.36);
+    margin-left:calc(var(--stack-w) * -0.13);
   }
-    .art-info-row:has(#art-info-toggle:checked){
-    margin-top:calc(var(--stack-w) * 0.32);
+  .art-info-row:has(#art-info-toggle:checked){
+    margin-top:calc(var(--stack-w) * 0.42);
   }
+
 }
 
 /* =========================================================
-   9. REDUCED MOTION (root level: applies to all breakpoints)
+   9. REDUCED MOTION
    ========================================================= */
 @media (prefers-reduced-motion:reduce){
-  .question,
   .reading-block,
   .closeup-container > img{ animation:none; }
   .closeup-container > img{ translate:none; transition:none; }
@@ -1089,6 +1036,43 @@ body{
   .face-right,
   .face-back,
   .mobile-face-title{ display:none; }
-  .face-front{ transform:none; } .cuboid-pivot { animation: none; }
+  .face-front{ transform:none; }
+  .cuboid-pivot{ animation:none; }
   #header-left{ opacity:1; }
+}
+
+
+/* =========================================================
+   10. GSAP HANDOFF (Zero layout/box-model changes)
+   Every rule here is scoped to html.js-gsap, which animations.js adds
+   only while GSAP is running (and removes on teardown / reduced motion).
+   ========================================================= */
+html.js-gsap .stack-wrapper .layer img{
+  will-change:transform;
+}
+
+.header-subtitle,
+#detail span{
+  pointer-events:auto;
+}
+
+/* .question ink-rise: GSAP animates --ink-rise, this paints it.
+   Browsers without background-clip:text keep the solid var(--ink). */
+@supports ((background-clip:text) or (-webkit-background-clip:text)){
+  html.js-gsap .question{
+    background-image:linear-gradient(
+      to top,
+      var(--blue) 0%,
+      var(--blue) var(--ink-rise),
+      var(--ink) calc(var(--ink-rise) + 20%),
+      var(--ink) 100%
+    );
+    background-size:100% 100%;
+    background-repeat:no-repeat;
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    -webkit-text-fill-color:transparent;
+    animation:none;
+  }
 }
