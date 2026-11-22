@@ -217,12 +217,13 @@ window.addEventListener("load", () => {
       }
 
       /* -------------------------------------------------------
-         2. INK HIGHLIGHT: .header-subtitle & #detail span
+         2. INK HIGHLIGHT: .header-subtitle (all sizes) &
+            #detail span (tablet & up only)
             (paint-only: background + box-shadow, no layout shift)
          ------------------------------------------------------- */
       const highlightTargets = [
         document.querySelector(".header-subtitle"),
-        ...document.querySelectorAll("#detail span"),
+        ...(isDesktop ? document.querySelectorAll("#detail span") : []),
       ].filter(Boolean);
       const highlights = createToggle(highlightTargets, highlightStates, HIGHLIGHT_PROPS);
       cleanups.push(bindPointer(highlights));
