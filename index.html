@@ -337,57 +337,11 @@
   else if (reduce.addListener) reduce.addListener(onMotionChange);
 })();
 
-
-document.addEventListener("click", function start() {
-  document.removeEventListener("click", start);
-
-  console.log("Recording mode armed");
-
-  // 8 seconds to start recording and move cursor away
-  setTimeout(() => {
-
-    window.scrollTo(0, 0);
-
-    // 15 second hero hold
-    setTimeout(() => {
-
-      const maxScroll =
-        Math.max(
-          document.documentElement.scrollHeight,
-          document.body.scrollHeight
-        ) - window.innerHeight;
-
-      const speed = 1.2; // slightly faster than before
-
-      function autoScroll() {
-        const currentY = window.scrollY;
-
-        if (currentY >= maxScroll - 2) {
-          window.scrollTo(0, maxScroll);
-
-          // hold credits/footer for 3 seconds
-          setTimeout(() => {
-            console.log("Recording sequence complete");
-          }, 3000);
-
-          return;
-        }
-
-        window.scrollBy(0, speed);
-        requestAnimationFrame(autoScroll);
-      }
-
-      requestAnimationFrame(autoScroll);
-
-    }, 15000);
-
-  }, 3000);
-
-}, { once: true });
-
-console.log("READY → Click once anywhere on the page.");
 </script>
 
-<script src="../node_modules/gsap/dist/gsap.min.js" defer></script>
-<script src="../node_modules/gsap/dist/ScrollTrigger.min.js" defer></script>
-<script src="animations.js" defer></script>
+<script src="https://jsdelivr.net" defer></script>
+<script src="https://jsdelivr.net" defer></script>
+<script src="animations.js?v=2" defer></script>
+
+</body>
+</html>
