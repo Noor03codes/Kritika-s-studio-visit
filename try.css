@@ -780,7 +780,7 @@ body{
     justify-self:start;
     width:fit-content;
     padding:0;
-    margin-top:0.6rem;
+    margin-top:0.9rem;
     font-size:var(--fs-text);
     font-weight:500;
     letter-spacing:.05em;
@@ -950,7 +950,7 @@ body{
 
   :root{
     --fs-question:clamp(3.15rem, 5vw, 4.15rem);
-    --ls-question:-.025em;
+    --ls-question:-.012em;
 
     --fs-subtitle:clamp(1.16rem, 1.38vw, 1.28rem);
     --fs-text:clamp(1.02rem, 1.2vw, 1.12rem);
@@ -986,6 +986,7 @@ body{
     text-align-last:left;
     hyphens:none;
     -webkit-hyphens:none;
+    text-justify:inter-character;
   }
 
   /* Essay */
