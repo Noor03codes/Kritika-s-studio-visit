@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://noor03codes.github.io/Kritika-s-studio-visit/sitemap.xml
