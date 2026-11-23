@@ -16,15 +16,17 @@ window.addEventListener("load", () => {
   const SCRUB_HOLD = 0.07; // scrubbed highlight: pause between in and out
   const SCRUB_STEP = 0.22; // scrubbed highlight: stagger between targets
 
-    const PEEL = {
+   const PEEL = {
     out: (mobile) =>
       mobile
-        ? { yPercent: -15, scale: 1.04, rotation: -2, duration: 0.5, ease: "power2.inOut" }
-        : { xPercent: -15, scale: 1.04, rotation: -2, duration: 0.5, ease: "power2.inOut" },
-    tuck: { xPercent: 0, yPercent: 0, scale: 1, rotation: 0, duration: 0.42, ease: "power3.inOut" },
+        ? { yPercent: -15, scale: 1.04, rotation: -2, duration: 0.6, ease: "power3.inOut" }
+        : { xPercent: -15, scale: 1.04, rotation: -2, duration: 0.6, ease: "power3.inOut" },
+    tuck: { xPercent: 0, yPercent: 0, scale: 1, rotation: 0, duration: 0.6, ease: "power4.inOut" },
     lift: 65,
-    releaseAt: 0.48,
+    releaseAt: 0.16,
   };
+
+
 
   const HIGHLIGHT_PROPS = "backgroundColor,boxShadow,color";
   const SURFACE_PROPS = "backgroundColor";
@@ -311,42 +313,39 @@ window.addEventListener("load", () => {
           gsap.set(imgList, { clearProps: "transform" });
         };
 
-                const onDeckChange = ({ target }) => {
+                  const onDeckChange = ({ target }) => {
           if (!target?.classList.contains("deck-radio") || !target.checked) return;
           if (target.id === activeId) return;
 
           const outLayer = layers[activeId];
           const inLayer = layers[target.id];
-          const outImg = outLayer?.querySelector("img");
           const inImg = inLayer?.querySelector("img");
           activeId = target.id;
 
           settle();
-          if (!outLayer || !outImg) return;
+          if (!outLayer) return;
 
           gsap.set(outLayer, { zIndex: PEEL.lift });
-
           peel = gsap
             .timeline({
               onComplete: () => {
                 gsap.set(outLayer, { clearProps: "zIndex" });
-                gsap.set([outImg, inImg].filter(Boolean), { clearProps: "transform" });
+                if (inImg) gsap.set(inImg, { clearProps: "transform,boxShadow" });
                 peel = null;
               },
             })
-            .to(outImg, { ...PEEL.out(isMobile), ease: "power2.inOut" }, 0)
-            .add(() => gsap.set(outLayer, { clearProps: "zIndex" }), PEEL.releaseAt)
-            .to(outImg, PEEL.tuck, PEEL.releaseAt);
+            .add(() => gsap.set(outLayer, { clearProps: "zIndex" }), PEEL.releaseAt);
 
           if (inImg) {
             peel.fromTo(
               inImg,
-              { scale: 0.93 },
-              { scale: 1, duration: 0.48, ease: "power3.out" },
-              0.12
+              { scale: 0.97, boxShadow: "0 12px 28px rgba(10, 22, 41, 0.22)" },
+              { scale: 1, boxShadow: "0 4px 12px rgba(10, 22, 41, 0.08)", duration: 0.45, ease: "power3.out" },
+              0
             );
           }
         };
+
 
 
         deck.addEventListener("change", onDeckChange);
