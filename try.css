@@ -152,17 +152,16 @@ body{
   white-space:nowrap;
 }
 
-.header-subtitle {
-    left: var(--page-gutter);
-    right: var(--page-gutter);
-    width: calc(100% - 2 * var(--page-gutter));
-    box-sizing: border-box;
-    font-size: clamp(0.64rem, 3.62cqw, 1.35rem);
-    letter-spacing: 0.035em;
-    white-space: nowrap;
-    text-align: justify;
-    text-align-last: justify;
-  }
+.header-subtitle{
+  top:calc(100% + var(--header-gap) + 1.15rem);
+  left:var(--page-gutter);
+  right:var(--page-gutter);
+  margin-left:0rem;
+  font-size:clamp(0.64rem, 3.55vw, 1.35rem);
+  font-weight:500;
+  letter-spacing:.04em;
+  line-height:1.2;
+}
 
 #detail{
   top:calc(100% + var(--header-gap) + 3.2rem);
