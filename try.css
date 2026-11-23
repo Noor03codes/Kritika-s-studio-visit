@@ -118,7 +118,6 @@ body{
   88%{ color:var(--blue); }
 }
 
-
 /* =========================================================
    2. HEADER / MASTHEAD
    ========================================================= */
@@ -157,15 +156,15 @@ body{
   top:calc(100% + var(--header-gap) + 1.15rem);
   left:var(--page-gutter);
   right:var(--page-gutter);
-  font-size:calc((100vw - 2 * var(--page-gutter)) / 25);
+  margin-left:0rem;
+  font-size:clamp(0.64rem, 3.55vw, 1.35rem);
   font-weight:500;
   letter-spacing:.04em;
   line-height:1.2;
-  text-align-last:justify;
 }
 
 #detail{
-  top:calc(100% + var(--header-gap) + 3.5rem);
+  top:calc(100% + var(--header-gap) + 3.2rem);
   left:var(--page-gutter);
   right:var(--page-gutter);
   display:flex;
@@ -177,6 +176,7 @@ body{
   font-weight:400;
   letter-spacing:.03em;
   line-height:1.35;
+  white-space:nowrap;
   opacity:.85;
 }
 
@@ -808,275 +808,4 @@ body{
 
   .main-image{
     grid-column:col 1 / col 9;
-    grid-row:2;
-  }
-
-  .image2-full{
-    grid-column:col 9 / content-end;
-    grid-row:2;
-    display:flex;
-    flex-direction:column;
-    justify-content:space-between;
-    align-self:start;
-    aspect-ratio:15 / 8;
-    gap:.5rem;
-    padding:0 0 0 var(--space-block);
-  }
-
-  .question{
-    display:block;
-    width:100%;
-    margin:0;
-    text-align:justify;
-    text-align-last:left;
-  }
-
-  .image2-full .bio-text{
-    width:100%;
-    margin:0;
-    text-align:justify;
-    text-align-last:left;
-    letter-spacing:0.04em;
-    hyphens:auto;
-    -webkit-hyphens:auto;
-    hyphenate-limit-chars:6 3 2;
-  }
-
-  /* ---------- Essay ---------- */
-  .boxabout-visit{
-    --stack-col:clamp(15.5rem, 23vw, 20.5rem);
-    --essay-gap:clamp(2.25rem, 4.5vw, 5.5rem);
-    grid-column:col 1 / content-end;
-    display:grid;
-    grid-template-columns:minmax(0,1fr) var(--stack-col);
-    grid-template-rows:auto auto auto 1fr;
-    align-items:start;
-    column-gap:var(--essay-gap);
-    row-gap:clamp(1.25rem,2.2vw,1.65rem);
-  }
-
-  .block-1,
-  .block-2,
-  .block-3{ margin:0; clear:none; }
-  .block-1{ grid-column:1 / -1; grid-row:1; }
-  .block-2{ grid-column:1; grid-row:2; align-self:center; }
-  .block-3{ grid-column:1; grid-row:3; }
-
-  .block-2,
-  .block-3{ line-height:1.52; }
-
-  .deck-container{
-    --stack-w:clamp(10.5rem, 15.5vw, 13.5rem);
-    float:none;
-    grid-column:2;
-    grid-row:2 / 4;
-    align-self:stretch;
-    width:100%;
-    margin:0;
-    padding:1rem 0 0;
-  }
-
-  .deck-radio{
-    top:-.6rem;
-    right:calc(var(--n) * 1.1rem - .6rem);
-  }
-
-    .stack-wrapper{ /* [ARCH 2] [ARCH 3] */
-    width:var(--stack-w);
-    margin-top:calc(var(--stack-w) * 0.08);
-    margin-right:auto;
-    margin-bottom:calc(var(--stack-w) * 0.36);
-    margin-left:calc(var(--stack-w) * 0.02);
-  }
-
-  .art-info-row:has(#art-info-toggle:checked){
-    margin-top:calc(var(--stack-w) * 0.66);
-  }
-
-
-    .grid-container:has(#art-info-toggle:checked) .box-closeup{
-    margin-top:clamp(3rem, 4.8vw, 4.4rem);
-  }
-
-
-    .art-info-row{ /* [ARCH 3] */
-    width:calc(100% - var(--stack-w) * 0.02);
-    flex-direction:column;
-    align-items:flex-start;
-    margin-top:calc(var(--stack-w) * 0.56);
-    margin-left:calc(var(--stack-w) * 0.02);
-    margin-right:0;
-  }
-
-  .art-info-box{
-    position:relative;
-    top:auto;
-    left:auto;
-    width:100%;
-    max-width:100%;
-    height:auto;
-    margin-top:.6rem;
-    padding:.5rem .75rem;
-    font-size:.64rem;
-    line-height:1.38;
-    text-align:left;
-  }
-
-  .art-info-box .art-meta{
-    margin:0 0 .2rem;
-    font-size:.66rem;
-  }
-
-  .art-info-box .art-desc{
-    font-size:.61rem;
-    line-height:1.38;
-  }
-
-  /* ---------- Closeup ---------- */
-   .box-closeup{
-    margin-top:clamp(2.6rem, 4.2vw, 3.8rem);
-    transition:margin-top .42s cubic-bezier(.22, 1, .36, 1);
-  }
-    
-  .closeup-credits{
-    max-width:none;
-  }
-}
-
-/* =========================================================
-   8. DESKTOP  (min-width: 1025px)
-   ========================================================= */
-@media (min-width:1025px){
-
-  :root{
-    --fs-question:clamp(3.15rem, 5vw, 4.15rem);
-    --ls-question:-.012em;
-
-    --fs-subtitle:clamp(1.16rem, 1.38vw, 1.28rem);
-    --fs-text:clamp(1.02rem, 1.2vw, 1.12rem);
-    --lh-text:1.3;
-    --fs-bio:clamp(0.84rem, 1.05vw, 0.92rem);
-    --lh-bio:1.26;
-    --fs-meta:clamp(0.64rem, 0.78vw, 0.72rem);
-
-    --closeup-h:clamp(27.5rem, 39vw, 37.5rem);
-
-    /* Stack roles — desktop: horizontal fan */
-    --stack-front:translate(0,0) scale(1.3) rotate(0.7deg);
-    --stack-right:translateX(10%) scale(1.2) rotate(5deg);
-    --stack-left:translateX(-10%) scale(1.2) rotate(-4deg);
-    --stack-back:translateY(6%) scale(1.2) rotate(3deg);
-  }
-
-  #header-left{ font-weight:500; }
-
-  .image2-full{
-    justify-content:space-between;
-    padding:0 0 0 var(--page-gutter);
-  }
-
-  #detail{
-    justify-content:space-between;
-  }
-
-  .question{
-    display:block;
-    width:100%;
-    text-align:justify;
-    text-align-last:left;
-    hyphens:none;
-    -webkit-hyphens:none;
-    text-justify:inter-character;
-  }
-
-  /* Essay */
-  .boxabout-visit{
-    margin-top:0.8%;
-    row-gap:0.12rem;
-  }
-
-  .reading-block{
-    max-width:none;
-    width:100%;
-    color:var(--slate);
-  }
-
-  .block-2,
-  .block-3{
-    max-width:95%;
-  }
-
-  .stack-wrapper{ /* [ARCH 2] [ARCH 3] */
-    margin-block:calc(var(--stack-w) * 0.16);
-    margin-left:calc(var(--stack-w) * 0.02);
-  }
-
-  /* Front card is scale(1.3) about its centre, so its visual left edge sits
-     at stack-left - 0.15w. With the wrapper's 0.02w margin that is -0.13w
-     from the column edge. The row spans the print's visual width and is
-     capped so its right edge never passes --stack-col. */
-  .art-info-row{ /* [ARCH 3] */
-    width:min(calc(var(--stack-w) * 1.3), calc(100% + var(--stack-w) * 0.13));
-    margin-top:calc(var(--stack-w) * 0.36);
-    margin-left:calc(var(--stack-w) * -0.13);
-  }
-  .art-info-row:has(#art-info-toggle:checked){
-    margin-top:calc(var(--stack-w) * 0.42);
-  }
-
-}
-
-/* =========================================================
-   9. REDUCED MOTION
-   ========================================================= */
-@media (prefers-reduced-motion:reduce){
-  .reading-block,
-  .closeup-container > img{ animation:none; }
-  .closeup-container > img{ translate:none; transition:none; }
-  .stack-wrapper .layer{ transition:none; }
-  .cap-face{ animation:none; }
-  .cap-1{ opacity:1; }
-
-  .face-right,
-  .face-back,
-  .mobile-face-title{ display:none; }
-  .face-front{ transform:none; }
-  .cuboid-pivot{ animation:none; }
-  #header-left{ opacity:1; }
-}
-
-
-/* =========================================================
-   10. GSAP HANDOFF (Zero layout/box-model changes)
-   Every rule here is scoped to html.js-gsap, which animations.js adds
-   only while GSAP is running (and removes on teardown / reduced motion).
-   ========================================================= */
-html.js-gsap .stack-wrapper .layer img{
-  will-change:transform;
-}
-
-.header-subtitle,
-#detail span{
-  pointer-events:auto;
-}
-
-/* .question ink-rise: GSAP animates --ink-rise, this paints it.
-   Browsers without background-clip:text keep the solid var(--ink). */
-@supports ((background-clip:text) or (-webkit-background-clip:text)){
-  html.js-gsap .question{
-    background-image:linear-gradient(
-      to top,
-      var(--blue) 0%,
-      var(--blue) var(--ink-rise),
-      var(--ink) calc(var(--ink-rise) + 20%),
-      var(--ink) 100%
-    );
-    background-size:100% 100%;
-    background-repeat:no-repeat;
-    -webkit-background-clip:text;
-    background-clip:text;
-    color:transparent;
-    -webkit-text-fill-color:transparent;
-    animation:none;
-  }
-}
+    grid-row
