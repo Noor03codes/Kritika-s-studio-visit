@@ -16,11 +16,14 @@ window.addEventListener("load", () => {
   const SCRUB_HOLD = 0.07; // scrubbed highlight: pause between in and out
   const SCRUB_STEP = 0.22; // scrubbed highlight: stagger between targets
 
-  const PEEL = {
-    out: { xPercent: -22, yPercent: -2, rotation: -3, duration: 0.22, ease: "power3.out" },
-    tuck: { xPercent: 0, yPercent: 0, rotation: 0, duration: 0.4, ease: "power3.inOut" },
-    lift: 65, // z-index held by the outgoing layer
-    releaseAt: 0.22 + 0.4 * 0.25, // out stroke + first quarter of the tuck
+    const PEEL = {
+    out: (mobile) =>
+      mobile
+        ? { yPercent: -15, scale: 1.04, rotation: -2, duration: 0.5, ease: "power2.inOut" }
+        : { xPercent: -15, scale: 1.04, rotation: -2, duration: 0.5, ease: "power2.inOut" },
+    tuck: { xPercent: 0, yPercent: 0, scale: 1, rotation: 0, duration: 0.42, ease: "power3.inOut" },
+    lift: 65,
+    releaseAt: 0.48,
   };
 
   const HIGHLIGHT_PROPS = "backgroundColor,boxShadow,color";
@@ -236,18 +239,19 @@ window.addEventListener("load", () => {
       cleanups.push(bindPointer(closeups));
 
       const scrubs = [];
-      if (isMobile && hasScrollTrigger) {
-        if (highlightTargets.length) {
-          scrubs.push(
-            createScrub(".box-header", highlights, { start: "bottom 55%", end: "bottom 15%" })
-          );
-        }
-        if (closeupTargets.length) {
-          scrubs.push(
-            createScrub(closeupTargets[0], closeups, { start: "top 80%", end: "bottom 30%" })
-          );
-        }
+      if (isMobile && highlightTargets.length) {
+        const introTimer = gsap.delayedCall(0.45, () => {
+          highlightTargets.forEach((el) => highlights.flash(el));
+        });
+        cleanups.push(() => introTimer.kill());
       }
+
+      if (isMobile && hasScrollTrigger && closeupTargets.length) {
+        scrubs.push(
+          createScrub(closeupTargets[0], closeups, { start: "top 80%", end: "bottom 30%" })
+        );
+      }
+
 
       /* Resize: drop every interrupted tween and orphaned inline style, then
          let any live scroll scrub repaint its true state. */
@@ -307,30 +311,43 @@ window.addEventListener("load", () => {
           gsap.set(imgList, { clearProps: "transform" });
         };
 
-        const onDeckChange = ({ target }) => {
+                const onDeckChange = ({ target }) => {
           if (!target?.classList.contains("deck-radio") || !target.checked) return;
           if (target.id === activeId) return;
 
           const outLayer = layers[activeId];
+          const inLayer = layers[target.id];
           const outImg = outLayer?.querySelector("img");
+          const inImg = inLayer?.querySelector("img");
           activeId = target.id;
 
           settle();
           if (!outLayer || !outImg) return;
 
           gsap.set(outLayer, { zIndex: PEEL.lift });
+
           peel = gsap
             .timeline({
               onComplete: () => {
                 gsap.set(outLayer, { clearProps: "zIndex" });
-                gsap.set(outImg, { clearProps: "transform" });
+                gsap.set([outImg, inImg].filter(Boolean), { clearProps: "transform" });
                 peel = null;
               },
             })
-            .to(outImg, PEEL.out)
-            .to(outImg, PEEL.tuck)
-            .add(() => gsap.set(outLayer, { clearProps: "zIndex" }), PEEL.releaseAt);
+            .to(outImg, { ...PEEL.out(isMobile), ease: "power2.inOut" }, 0)
+            .add(() => gsap.set(outLayer, { clearProps: "zIndex" }), PEEL.releaseAt)
+            .to(outImg, PEEL.tuck, PEEL.releaseAt);
+
+          if (inImg) {
+            peel.fromTo(
+              inImg,
+              { scale: 0.93 },
+              { scale: 1, duration: 0.48, ease: "power3.out" },
+              0.12
+            );
+          }
         };
+
 
         deck.addEventListener("change", onDeckChange);
         cleanups.push(() => {
@@ -347,15 +364,15 @@ window.addEventListener("load", () => {
       if (question && hasScrollTrigger) {
         gsap.fromTo(
           question,
-          { "--ink-rise": "-15%" },
+          { "--ink-rise": "-2%" },
           {
             "--ink-rise": "105%",
-            ease: "none",
+            ease: "power3.out",
             scrollTrigger: {
               trigger: root,
               start: "top top",
-              end: "12% top",
-              scrub: 0.8,
+              end: "18% top",
+              scrub: 1.4,
             },
           }
         );
