@@ -118,20 +118,7 @@ body{
   88%{ color:var(--blue); }
 }
 
-/* =========================================================
-   2. HEADER / MASTHEAD
-   ========================================================= */
-.box-header{
-  grid-column:full-start / full-end;
-  grid-row:1;
-  align-self:stretch;
-  position:relative;
-  z-index:2;
-  margin-bottom:var(--header-gap);
-  pointer-events:none;
-}
 
-#header-left{
 /* =========================================================
    2. HEADER / MASTHEAD
    ========================================================= */
