@@ -155,16 +155,16 @@ body{
 .header-subtitle{
   top:calc(100% + var(--header-gap) + 1.15rem);
   left:var(--page-gutter);
-  right: var(--page-gutter);
-  margin-left:0rem;
-  font-size: clamp(0.64rem, 3.62cqw, 1.35rem);
+  right:var(--page-gutter);
+  font-size:calc((100vw - 2 * var(--page-gutter)) / 25);
   font-weight:500;
-  letter-spacing:.06em;
+  letter-spacing:.04em;
   line-height:1.2;
+  text-align-last:justify;
 }
 
 #detail{
-  top:calc(100% + var(--header-gap) + 3.2rem);
+  top:calc(100% + var(--header-gap) + 3.5rem);
   left:var(--page-gutter);
   right:var(--page-gutter);
   display:flex;
@@ -176,7 +176,6 @@ body{
   font-weight:400;
   letter-spacing:.03em;
   line-height:1.35;
-  white-space:nowrap;
   opacity:.85;
 }
 
