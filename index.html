@@ -1,1081 +1,344 @@
-@property --ink-rise{
-  syntax:"<percentage>";
-  inherits:false;
-  initial-value:-35%;
-}
-
-/* =========================================================
-   0. TOKENS
-   ========================================================= */
-:root{
-  /* Colour */
-  --paper: #F7F8F7;
-  --ink: #0A1629;
-  --blue: #134E8E;
-  --crimson: #8A152B;
-  --panel: var(--blue);
-  --slate: var(--blue);
-  --pink: #d05a7d;
-  --grey: #4f4f4f;
-  --meta-minor: var(--grey);
-
-  /* Grid rails + vertical rhythm */
-  --content-max:100rem;
-  --page-gutter:clamp(1rem, 3.5vw, 2.5rem);
-  --space-section:clamp(2.5rem,7vw,6.8rem);
-  --space-block:clamp(1rem,2vw + .5rem,1.6rem);
-  --header-gap:clamp(0.95rem,2.4vw,2rem);
-  --col-max:calc((var(--content-max) - 2 * var(--page-gutter)) / 20);
-  --rail-inline:max(var(--page-gutter), calc((100% - var(--content-max)) / 2 + var(--page-gutter)));
-
-  /* Type: tier 1 (display) */
-  --fs-hero:clamp(2.275rem, 11.6vw, 4.375rem);
-  --fs-question:clamp(1.85rem, 8vw, 3.15rem);
-  --lh-question:1.02;
-  --ls-question:-.034em;
-
-  /* Type: tier 2 (body) */
-  --fs-text:clamp(0.86rem, 2.5vw, 1.0rem);
-  --lh-text:1.44;
-
-  /* Type: tier 3 (meta + bio) */
-  --fs-subtitle:clamp(0.99rem, 0.88rem + 0.45vw, 1.28rem);
-  --fs-meta:clamp(0.54rem, 0.46rem + 0.24vw, 0.72rem);
-  --fs-bio:clamp(0.76rem, 2.2vw, 0.85rem);
-  --lh-bio:1.26;
-  --track-meta:.1em;
-  --fs-credit:clamp(0.45rem, 0.36rem + 0.32vw, 0.65rem);
-
-  /* Stack roles — mobile: vertical cascade */
-  --stack-front:translateY(0) scale(1.12) rotate(0deg);
-  --stack-right:translateY(14%) scale(1.06) rotate(0deg);
-  --stack-left:translateY(28%) scale(1.0) rotate(0deg);
-  --stack-back:translateY(42%) scale(0.94) rotate(0deg);
-  --z-front:50;
-  --z-right:40;
-  --z-left:30;
-  --z-back:10;
-
-  /* Closeup stage (mobile) */
-  --closeup-h:clamp(19rem, 53vw, 25rem);
-}
-
-/* =========================================================
-   1. BASE
-   ========================================================= */
-*{
-  box-sizing:border-box;
-  margin:0;
-}
-
-html{
-  scrollbar-width:thin;
-  scrollbar-color:var(--blue) var(--paper);
-}
-
-html::-webkit-scrollbar{
-  width:5px;
-}
-
-html::-webkit-scrollbar-track{
-  background:var(--paper);
-}
-
-html::-webkit-scrollbar-thumb{
-  background:var(--blue);
-  border-radius:2px;
-}
-
-body{
-  background:var(--paper);
-  color:var(--blue);
-  font-family:'Gill Sans MT','Gill Sans',Calibri,sans-serif;
-  overflow-x:clip;
-}
-
-.grid-container{
-  display:grid;
-  grid-template-columns:
-    [full-start] var(--page-gutter)
-    [content-start] minmax(0,1fr)
-    [content-end] var(--page-gutter)
-    [full-end];
-  width:100%;
-}
-
-.grid-container img{
-  display:block;
-  max-width:100%;
-}
-
-/* ---------- Keyframes ---------- */
-@keyframes reading-focus{
-  0%{ color:var(--blue); }
-  25%{ color:var(--blue); }
-  40%{ color:var(--pink); }
-  65%{ color:var(--pink); }
-  75%{ color:var(--crimson); }
-  88%{ color:var(--blue); }
-}
-
-/* =========================================================
-   2. HEADER / MASTHEAD
-   ========================================================= */
-.box-header{
-  grid-column:full-start / full-end;
-  grid-row:1;
-  align-self:stretch;
-  position:relative;
-  z-index:2;
-  margin-bottom:var(--header-gap);
-  pointer-events:none;
-}
-
-#header-left{
-  position:absolute;
-  inset-inline:0;
-  bottom:calc(1.8rem - var(--header-gap));
-  text-align:center;
-  font-size:var(--fs-hero);
-  font-weight:400;
-  line-height:1;
-  letter-spacing:.01em;
-  white-space:nowrap;
-  color:var(--paper);
-}
-
-.header-subtitle,
-#detail{
-  position:absolute;
-  text-transform:uppercase;
-  color:var(--pink);
-  white-space:nowrap;
-}
-
-.header-subtitle{
-  top:calc(100% + var(--header-gap) + 1.15rem);
-  left:var(--page-gutter);
-  right:var(--page-gutter);
-  font-size:calc((100vw - 2 * var(--page-gutter)) / 25);
-  font-weight:500;
-  letter-spacing:.04em;
-  line-height:1.2;
-  text-align-last:justify;
-}
-
-#detail{
-  top:calc(100% + var(--header-gap) + 3.5rem);
-  left:var(--page-gutter);
-  right:var(--page-gutter);
-  display:flex;
-  flex-direction:row;
-  justify-content:space-between;
-  align-items:baseline;
-  gap:0.4em;
-  font-size:var(--fs-meta);
-  font-weight:400;
-  letter-spacing:.03em;
-  line-height:1.35;
-  opacity:.85;
-}
-
-#detail span:not(:last-child)::after{
-  content:none;
-}
-
-@media (max-width:360px){
-  #detail{
-    gap:0.3em;
-    letter-spacing:.01em;
-    font-size:clamp(0.46rem, 2.5vw, 0.54rem);
-  }
-}
-
-/* ---------- Hero Cuboid ---------- */
-.main-image{
-  grid-column:full-start / full-end;
-  grid-row:1;
-  position:relative;
-  z-index:1;
-  align-self:start;
-  display:grid;
-  grid-template-columns:minmax(0,1fr);
-  min-width:0;
-  container-type:inline-size;
-  background:transparent;
-  overflow:clip;
-}
-
-@media (max-width:767px){
-  #header-left{ opacity:0; }
-  .main-image{
-    background:linear-gradient(to bottom, var(--ink) 55%, transparent 55%);
-  }
-}
-
-.clipping-container1{
-  --half:50cqw;
-  position:relative;
-  width:100%;
-  aspect-ratio:7 / 5;
-  perspective:3200px;
-}
-
-.cuboid-pivot{
-  position:relative;
-  width:100%;
-  height:100%;
-  transform-style:preserve-3d;
-  animation:cuboid-turn 6s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
-}
-
-.cuboid-caption{
-  position:relative;
-  display:grid;
-  margin-top:0.4rem;
-  padding-inline:var(--page-gutter);
-  margin-left:0rem;
-  font-size:clamp(0.42rem, 0.35rem + 0.24vw, 0.56rem);
-  font-weight:400;
-  letter-spacing:.08em;
-  text-transform:uppercase;
-  line-height:1.25;
-  color:var(--meta-minor);
-  opacity:.62;
-}
-
-.cap-face{
-  grid-area:1 / 1;
-  opacity:0;
-  animation:6s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
-}
-
-.cap-1{ animation-name:cap-front; }
-.cap-2{ animation-name:cap-right; }
-.cap-3{ animation-name:cap-back; }
-
-@keyframes cap-front{
-  0%, 12%{ opacity:1; }
-  35%, 100%{ opacity:0; }
-}
-
-@keyframes cap-right{
-  0%, 12%{ opacity:0; }
-  35%, 65%{ opacity:1; }
-  88%, 100%{ opacity:0; }
-}
-
-@keyframes cap-back{
-  0%, 65%{ opacity:0; }
-  88%, 100%{ opacity:1; }
-}
-
-.hero-face{
-  position:absolute;
-  inset:0;
-  margin:0;
-  width:100%;
-  height:100%;
-  -webkit-backface-visibility:hidden;
-  backface-visibility:hidden;
-}
-
-.face-front{ transform:rotateY(0deg)   translateZ(var(--half)); }
-.face-right{ transform:rotateY(90deg)  translateZ(var(--half)); }
-.face-back{  transform:rotateY(180deg) translateZ(var(--half)); }
-
-@keyframes cuboid-turn{
-  0%, 12%{
-    transform:translate3d(0,0,calc(var(--half) * -1)) rotateY(0deg);
-  }
-  35%, 65%{
-    transform:translate3d(0,0,calc(var(--half) * -1)) rotateY(-90deg);
-  }
-  88%, 100%{
-    transform:translate3d(0,0,calc(var(--half) * -1)) rotateY(-180deg);
-  }
-}
-
-.mobile-face-title{
-  position:absolute;
-  inset-inline:0;
-  bottom:calc(1.8rem - var(--header-gap));
-  z-index:1;
-  text-align:center;
-  font-size:var(--fs-hero);
-  font-weight:400;
-  line-height:1;
-  letter-spacing:.01em;
-  white-space:nowrap;
-  color:var(--paper);
-  pointer-events:none;
-}
-
-@media (min-width:768px){
-  .main-image{
-    padding-block:var(--space-block);
-    margin-block:calc(var(--space-block) * -1);
-  }
-  .mobile-face-title{ display:none; }
-  .cuboid-caption{
-    margin-top:0.45rem;
-    padding-inline:0;
-    margin-left:0;
-  }
-}
-
-.image1{
-  display:block;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  object-position:center;
-}
-
-.face-front .image1{ object-position:center 25%; }
-.face-back .image1{ object-position:center 20%; }
-
-/* =========================================================
-   3. QUESTION + BIO
-   ========================================================= */
-.image2-full{
-  grid-column:content-start / content-end;
-  grid-row:2;
-  min-width:0;
-  padding:5.1rem 0 0;
-}
-
-.image2-full .bio-text{
-  margin-top:.75rem;
-  font-size:var(--fs-bio);
-  line-height:var(--lh-bio);
-  letter-spacing:.005em;
-  text-align:justify;
-  color:var(--panel);
-}
-
-.question{
-  display:block;
-  width:100%;
-  margin:0 0 .9em;
-  padding:0;
-  font-size:var(--fs-question);
-  font-weight:400;
-  line-height:var(--lh-question);
-  letter-spacing:var(--ls-question);
-  text-align:justify;
-  hyphens:none;
-  -webkit-hyphens:none;
-  color:var(--ink);
-}
-
-@supports (animation-timeline:view()){
-  .reading-block{
-    view-timeline-name:--para-flow;
-    view-timeline-axis:block;
-  }
-
-  .reading-block .optical-term{
-    animation:reading-focus linear both;
-    animation-timeline:--para-flow;
-    animation-range:entry 10% exit 15%;
-  }
-}
-
-.optical-term{
-  background:transparent;
-  color:inherit;
-}
-
-/* =========================================================
-   4. ESSAY (.boxabout-visit)
-   ========================================================= */
-.boxabout-visit{
-  grid-column:content-start / content-end;
-  grid-row:3;
-  display:flow-root;
-  padding:clamp(1.75rem,3.5vw,3.25rem) 0 0;
-}
-
-.reading-block{
-  max-width:none;
-  padding:0;
-  font-size:var(--fs-text);
-  line-height:var(--lh-text);
-  letter-spacing:0.01em;
-  text-align:justify;
-  text-align-last:left;
-  hyphens:auto;
-  -webkit-hyphens:auto;
-  hyphenate-limit-chars:6 3 3;
-  text-wrap:pretty;
-  overflow-wrap:break-word;
-}
-
-.block-1{ clear:both; color:var(--blue); }
-.block-2{ clear:none; margin-top:var(--space-block); color:var(--blue); }
-.block-3{ clear:none; margin-top:var(--space-block); color:var(--blue); }
-
-/* =========================================================
-   5. DECK MODULE
-   ========================================================= */
-.deck-container{
-  position:relative;
-  contain:layout style;
-  float:right;
-  width:45%;
-  min-width:0;
-  margin:clamp(.55rem,2vw,.9rem) 0 .85rem clamp(1rem,4vw,1.4rem);
-  padding:1.4rem 0 0;
-}
-
-.stack-wrapper{
-  position:relative;
-  isolation:isolate;
-  width:94%;
-  margin-top:7%;
-  margin-left:auto;
-  margin-bottom:48%;
-  aspect-ratio:4 / 5;
-}
-
-.stack-wrapper .layer{
-  position:absolute;
-  inset:0;
-  aspect-ratio:4 / 5;
-  transform-origin:center;
-  pointer-events:auto;
-  cursor:pointer;
-  backface-visibility:hidden;
-  transition:transform .5s cubic-bezier(.25,1,.5,1), z-index .5s step-start;
-}
-
-.stack-wrapper .layer img{
-  display:block;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  pointer-events:none;
-  user-select:none;
-}
-
-/* ---------- Nav dots ---------- */
-.deck-radio{
-  --n:0;
-  position:absolute;
-  top:.25rem;
-  right:calc(var(--n) * 1.1rem - .6rem);
-  z-index:60;
-  display:grid;
-  place-items:center;
-  min-width:24px;
-  min-height:24px;
-  width:1.5rem;
-  height:1.5rem;
-  margin:0;
-  padding:0;
-  appearance:none;
-  -webkit-appearance:none;
-  border:0;
-  border-radius:50%;
-  background:transparent;
-  opacity:.85;
-  cursor:pointer;
-  pointer-events:auto;
-}
-
-.deck-radio::after{
-  content:"";
-  width:.3rem;
-  height:.3rem;
-  border:1px solid var(--ink);
-  border-radius:50%;
-  background:transparent;
-}
-
-.deck-radio:checked::after{
-  background:var(--blue);
-  border-color:var(--blue);
-}
-
-#slide-4{ --n:0; }
-#slide-5{ --n:1; }
-#slide-1{ --n:2; }
-#slide-2{ --n:3; }
-
-.deck-radio:focus-visible{
-  outline:none;
-}
-
-.deck-radio:focus-visible::after{
-  outline:1px solid var(--ink);
-  outline-offset:1px;
-}
-
-.art-info-row{
-  position:relative;
-  z-index:70;
-  display:flex;
-  flex-direction:column;
-  align-items:flex-end;
-  width:100%;
-  margin-top:clamp(.45rem, 1.2vw, .75rem);
-  padding:0;
-  transition:margin-top .25s ease;
-}
-
-.art-info-row:has(#art-info-toggle:checked){
-  margin-top:clamp(.95rem, 2.4vw, 1.5rem);
-}
-
-.art-info-checkbox{
-  position:absolute;
-  width:1px;
-  height:1px;
-  margin:0;
-  opacity:0;
-  pointer-events:none;
-}
-
-.art-info-btn{
-  padding:0.15rem 0;
-  border:none;
-  border-bottom:1px solid var(--blue);
-  border-radius:0;
-  background:transparent;
-  color:var(--blue);
-  font-family:inherit;
-  font-size:var(--fs-credit);
-  font-weight:500;
-  letter-spacing:var(--track-meta);
-  text-transform:uppercase;
-  line-height:1.2;
-  cursor:pointer;
-  user-select:none;
-}
-
-.art-info-btn::after{ content:"WORK DETAILS +"; }
-.art-info-checkbox:checked ~ .art-info-btn{ color:var(--crimson); border-bottom:1px solid var(--blue); }
-.art-info-checkbox:checked ~ .art-info-btn::after{ content:"CLOSE DETAILS −"; }
-
-.art-info-box{
-  display:none;
-  width:100%;
-  margin-top:clamp(.6rem, 1.5vw, .9rem);
-  padding:clamp(.6rem,2.2vw,.85rem) clamp(.8rem,2.8vw,1.1rem);
-  border-radius:8px;
-  background:var(--blue);
-  color:var(--paper);
-  font-size:clamp(.68rem,2.1vw,.78rem);
-  line-height:1.4;
-  text-align:left;
-  overflow-wrap:anywhere;
-}
-
-.art-info-box .art-item{ display:none; padding:0; }
-
-#slide-1:checked ~ .art-info-row .art-info-box .info-1,
-#slide-2:checked ~ .art-info-row .art-info-box .info-2,
-#slide-4:checked ~ .art-info-row .art-info-box .info-4,
-#slide-5:checked ~ .art-info-row .art-info-box .info-5{ display:block; }
-
-.art-info-checkbox:checked ~ .art-info-box{ display:block; }
-
-/* ---------- Role-based states ---------- */
-#slide-1:checked ~ .stack-wrapper .card-1{ transform:var(--stack-front); z-index:var(--z-front); }
-#slide-1:checked ~ .stack-wrapper .card-5{ transform:var(--stack-right); z-index:var(--z-right); }
-#slide-1:checked ~ .stack-wrapper .card-4{ transform:var(--stack-left);  z-index:var(--z-left); }
-#slide-1:checked ~ .stack-wrapper .card-2{ transform:var(--stack-back);  z-index:var(--z-back); }
-
-#slide-2:checked ~ .stack-wrapper .card-2{ transform:var(--stack-front); z-index:var(--z-front); }
-#slide-2:checked ~ .stack-wrapper .card-1{ transform:var(--stack-right); z-index:var(--z-right); }
-#slide-2:checked ~ .stack-wrapper .card-5{ transform:var(--stack-left);  z-index:var(--z-left); }
-#slide-2:checked ~ .stack-wrapper .card-4{ transform:var(--stack-back);  z-index:var(--z-back); }
-
-#slide-4:checked ~ .stack-wrapper .card-4{ transform:var(--stack-front); z-index:var(--z-front); }
-#slide-4:checked ~ .stack-wrapper .card-5{ transform:var(--stack-right); z-index:var(--z-right); }
-#slide-4:checked ~ .stack-wrapper .card-1{ transform:var(--stack-left);  z-index:var(--z-left); }
-#slide-4:checked ~ .stack-wrapper .card-2{ transform:var(--stack-back);  z-index:var(--z-back); }
-
-#slide-5:checked ~ .stack-wrapper .card-5{ transform:var(--stack-front); z-index:var(--z-front); }
-#slide-5:checked ~ .stack-wrapper .card-4{ transform:var(--stack-right); z-index:var(--z-right); }
-#slide-5:checked ~ .stack-wrapper .card-1{ transform:var(--stack-left);  z-index:var(--z-left); }
-#slide-5:checked ~ .stack-wrapper .card-2{ transform:var(--stack-back);  z-index:var(--z-back); }
-
-/* =========================================================
-   6. CLOSEUP
-   ========================================================= */
-.box-closeup{
-  grid-column:full-start / full-end;
-  grid-row:4;
-  position:relative;
-  display:flex;
-  flex-direction:column;
-  margin-top:calc(var(--space-section) + clamp(1rem, 3vw, 1.75rem));
-  background-color:var(--blue);
-}
-
-.grid-container:has(#art-info-toggle:checked) .box-closeup{
-  margin-top:clamp(1.6rem, 3.8vw, 2.5rem);
-}
-
-.closeup-container{
-  --hover-pan:0%;
-  position:relative;
-  flex:0 0 auto;
-  width:100%;
-  height:var(--closeup-h);
-  min-height:0;
-  background-color:var(--blue);
-  overflow:hidden;
-}
-
-.closeup-container > img{
-  position:absolute;
-  left:0;
-  right:0;
-  bottom:0;
-  display:block;
-  width:100%;
-  max-width:none;
-  height:154%;
-  object-fit:cover;
-  object-position:center bottom;
-  backface-visibility:hidden;
-  will-change:transform, translate;
-  translate:0 var(--hover-pan, 0%);
-  transition:translate .35s cubic-bezier(.16,1,.3,1);
-}
-
-@keyframes closeup-pan{
-  from{ transform:translate3d(0, 0%, 0); }
-  to{ transform:translate3d(0, 30%, 0); }
-}
-
-@supports (animation-timeline:scroll()){
-  .closeup-container > img{
-    animation:closeup-pan linear both;
-    animation-timeline:scroll(root block);
-    animation-range:70% 100%;
-  }
-}
-
-.closeup-text{
-  position:absolute;
-  top:clamp(1.5rem,5vw,3rem);
-  left:var(--rail-inline);
-  right:var(--rail-inline);
-  z-index:10;
-  max-width:40rem;
-  padding:clamp(.85rem,3vw,2rem) clamp(.95rem,4vw,3rem);
-  background:var(--blue);
-  color:var(--paper);
-  font-size:var(--fs-text);
-  font-weight:300;
-  line-height:var(--lh-text);
-  letter-spacing:.01em;
-  text-align:left;
-  hyphens:auto;
-  -webkit-hyphens:auto;
-}
-
-.closeup-credits{
-  position:relative;
-  flex:0 0 auto;
-  z-index:10;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:0.15rem;
-  width:100%;
-  padding:clamp(0.55rem, 1.3vw, 0.85rem) var(--rail-inline);
-  padding-bottom:calc(clamp(0.55rem, 1.3vw, 0.85rem) + env(safe-area-inset-bottom, 0px));
-  background:var(--ink);
-  color:var(--paper);
-  font-size:var(--fs-credit);
-  letter-spacing:var(--track-meta);
-  text-transform:uppercase;
-  line-height:1.25;
-  text-align:center;
-}
-
-.closeup-credits > *{
-  margin:0;
-  font:inherit;
-}
-
-/* =========================================================
-   7. TABLET + UP  (min-width: 768px)
-   ========================================================= */
-@media (min-width:768px){
-
-  :root{
-    --fs-hero:clamp(3.4rem,6.2vw,5.75rem);
-    --fs-question:clamp(1.9rem,4.9vw,3.15rem);
-    --lh-question:1.06;
-    --ls-question:-.02em;
-    --fs-text:clamp(0.92rem,1.4vw,1rem);
-    --fs-bio:clamp(.84rem,1.25vw,.96rem);
-    --lh-bio:1.2;
-    --space-section:clamp(1.75rem, 3.5vw, 3.25rem);
-    --closeup-h:clamp(22.5rem, 41vw, 30.5rem);
-
-    /* Stack roles — tablet: calibrated vertical cascade */
-    --stack-front:translateY(0) scale(1.08) rotate(0deg);
-    --stack-right:translateY(11%) scale(1.04) rotate(0deg);
-    --stack-left:translateY(22%) scale(1.0) rotate(0deg);
-    --stack-back:translateY(33%) scale(0.95) rotate(0deg);
-  }
-
-  .grid-container{
-    grid-template-columns:
-      [full-start] minmax(var(--page-gutter),1fr)
-      [content-start] repeat(20,[col] minmax(0,var(--col-max)))
-      [content-end] minmax(var(--page-gutter),1fr)
-      [full-end];
-    grid-template-rows:auto auto auto auto;
-    align-items:start;
-    padding-top:clamp(1.06rem, 2.25vw, 2rem);
-    background:var(--paper);
-  }
-
-  /* ---------- Header: two tracks, left/right ---------- */
-  .box-header{
-    grid-column:content-start / content-end;
-    align-self:start;
-    display:grid;
-    grid-template-columns:auto minmax(0,1fr);
-    column-gap:clamp(2rem, 5vw, 5.5rem);
-    align-items:start;
-    margin-bottom:calc(var(--header-gap) + .75rem);
-    padding:0 0 .5rem;
-  }
-
-  #header-left{
-    position:static;
-    grid-column:1;
-    grid-row:1;
-    bottom:auto;
-    text-align:left;
-    inset-inline:auto;
-    justify-self:start;
-    min-height:1em;
-    text-indent:-0.06em;
-    font-weight:400;
-    color:var(--ink);
-    pointer-events:auto;
-  }
-
-  .header-subtitle,
-  #detail{
-    position:static;
-    top:auto;
-  }
-
-  .header-subtitle{
-    grid-column:1;
-    grid-row:2;
-    justify-self:start;
-    width:fit-content;
-    padding:0;
-    margin-top:0.9rem;
-    font-size:var(--fs-text);
-    font-weight:500;
-    letter-spacing:.05em;
-  }
-
-  #detail{
-    grid-column:2;
-    grid-row:1;
-    display:flex;
-    flex-direction:row;
-    flex-wrap:wrap;
-    justify-content:flex-end;
-    align-items:baseline;
-    gap:0.45rem 1.5rem;
-    width:100%;
-    margin:calc(var(--fs-hero) * 0.16) 0 0;
-    font-size:var(--fs-meta);
-    letter-spacing:.05em;
-  }
-
-  /* ---------- Hero row ---------- */
-  .clipping-container1{
-    aspect-ratio:5 / 4;
-  }
-
-  .main-image{
-    grid-column:col 1 / col 9;
-    grid-row:2;
-  }
-
-  .image2-full{
-    grid-column:col 9 / content-end;
-    grid-row:2;
-    display:flex;
-    flex-direction:column;
-    justify-content:space-between;
-    align-self:start;
-    aspect-ratio:15 / 8;
-    gap:.5rem;
-    padding:0 0 0 var(--space-block);
-  }
-
-  .question{
-    display:block;
-    width:100%;
-    margin:0;
-    text-align:justify;
-    text-align-last:left;
-  }
-
-  .image2-full .bio-text{
-    width:100%;
-    margin:0;
-    text-align:justify;
-    text-align-last:left;
-    letter-spacing:0.04em;
-    hyphens:auto;
-    -webkit-hyphens:auto;
-    hyphenate-limit-chars:6 3 2;
-  }
-
-  /* ---------- Essay ---------- */
-  .boxabout-visit{
-    --stack-col:clamp(15.5rem, 23vw, 20.5rem);
-    --essay-gap:clamp(2.25rem, 4.5vw, 5.5rem);
-    grid-column:col 1 / content-end;
-    display:grid;
-    grid-template-columns:minmax(0,1fr) var(--stack-col);
-    grid-template-rows:auto auto auto 1fr;
-    align-items:start;
-    column-gap:var(--essay-gap);
-    row-gap:clamp(1.25rem,2.2vw,1.65rem);
-  }
-
-  .block-1,
-  .block-2,
-  .block-3{ margin:0; clear:none; }
-  .block-1{ grid-column:1 / -1; grid-row:1; }
-  .block-2{ grid-column:1; grid-row:2; align-self:center; }
-  .block-3{ grid-column:1; grid-row:3; }
-
-  .block-2,
-  .block-3{ line-height:1.52; }
-
-  .deck-container{
-    --stack-w:clamp(10.5rem, 15.5vw, 13.5rem);
-    float:none;
-    grid-column:2;
-    grid-row:2 / 4;
-    align-self:stretch;
-    width:100%;
-    margin:0;
-    padding:1rem 0 0;
-  }
-
-  .deck-radio{
-    top:-.6rem;
-    right:calc(var(--n) * 1.1rem - .6rem);
-  }
-
-    .stack-wrapper{ /* [ARCH 2] [ARCH 3] */
-    width:var(--stack-w);
-    margin-top:calc(var(--stack-w) * 0.08);
-    margin-right:auto;
-    margin-bottom:calc(var(--stack-w) * 0.36);
-    margin-left:calc(var(--stack-w) * 0.02);
-  }
-
-  .art-info-row:has(#art-info-toggle:checked){
-    margin-top:calc(var(--stack-w) * 0.66);
-  }
-
-
-    .grid-container:has(#art-info-toggle:checked) .box-closeup{
-    margin-top:clamp(3rem, 4.8vw, 4.4rem);
-  }
-
-
-    .art-info-row{ /* [ARCH 3] */
-    width:calc(100% - var(--stack-w) * 0.02);
-    flex-direction:column;
-    align-items:flex-start;
-    margin-top:calc(var(--stack-w) * 0.56);
-    margin-left:calc(var(--stack-w) * 0.02);
-    margin-right:0;
-  }
-
-  .art-info-box{
-    position:relative;
-    top:auto;
-    left:auto;
-    width:100%;
-    max-width:100%;
-    height:auto;
-    margin-top:.6rem;
-    padding:.5rem .75rem;
-    font-size:.64rem;
-    line-height:1.38;
-    text-align:left;
-  }
-
-  .art-info-box .art-meta{
-    margin:0 0 .2rem;
-    font-size:.66rem;
-  }
-
-  .art-info-box .art-desc{
-    font-size:.61rem;
-    line-height:1.38;
-  }
-
-  /* ---------- Closeup ---------- */
-   .box-closeup{
-    margin-top:clamp(2.6rem, 4.2vw, 3.8rem);
-    transition:margin-top .42s cubic-bezier(.22, 1, .36, 1);
-  }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kritika Goel - Studio Visit 01</title>
+    <link rel="stylesheet" href="try.css">
+</head>
+
+<body>
+
+<div class="grid-container">
+
+ <header class="box-header">
+        <h1 id="header-left">KRITIKA GOEL</h1>
+        <p id="detail">
+            <span>FIELD LOG 01 | <time datetime="2026-02-04">04.02.2026</time></span>
+            <span> INITIATED AT INTERSPACE</span>
+            <span> STUDIO SITE: NEW DELHI</span></p>
+        <p class="header-subtitle">
+            FIELD OBSERVATION & MATERIAL RECORD
+        </p>
+    </header>
+
+       <section class="main-image">
+        <div class="clipping-container1">
+            <div class="cuboid-pivot">
+                <figure class="hero-face face-front">
+                    <img class="image1" src="work-her.jpeg" alt="Kritika in studio" fetchpriority="high" decoding="async">
+                    <span class="mobile-face-title" aria-hidden="true">KRITIKA GOEL</span>
+                </figure>
+                <figure class="hero-face face-right">
+                    <img class="image1" src="plant-work.jpeg" alt="Kritika in studio, second view" loading="eager" decoding="async">
+                </figure>
+                <figure class="hero-face face-back">
+                    <img class="image1" src="table.jpg" alt="Kritika working on painting in studio" loading="eager" decoding="async">
+                </figure>
+            </div>
+        </div>
+                <div class="cuboid-caption" aria-live="off">
+                  <span class="cap-face cap-1"><strong> FIG. 01/03 · Field Record ·&nbsp;</strong> Kritika Goel in studio, New Delhi</span>
+
+                  <span class="cap-face cap-2">
+                    <strong> FIG. 02/03 · Field Record ·</strong>&nbsp; Kritika Goel and Shankar Tripathi in studio, New Delhi</span>
+
+                  <span class="cap-face cap-3">
+                    <strong>FIG. 03/03 ·</strong>&nbsp; Detail of <em>Inside New Studio</em>, 2024 · Reflective Tape on Paper· 4 x 6 in. Artist's Collection, New Delhi. Documentation Courtesy of Artist.</span>
+              </div>
+
+
+    </section>
+
+
+
+
+    <section class="image2-full">
+        <p class="question">
+            What does a material register physically before meaning is projected?
+        </p>
+        <p class="bio-text">
+              Kritika Goel (b. 1998, New Delhi) is a multimedia artist working across painting,
+              installation, and digital media. She holds an MFA in Painting from Amity University,
+              Noida, and has exhibited in group shows including <em>Mute/Unmute</em> at Method Kala Ghoda, Mumbai (2024), 
+              <em>Ode to the Sun</em> at The Stainless Gallery, New Delhi (2024), and at Artbuzz Studios parallel to the India Art Fair.
+              Her practice was documented during Interspace's curatorial research into emerging contemporary art in India.
+        </p>
+    </section>
+
+    <section class="boxabout-visit">
+         <p class="reading-block block-1">
+          Recorded on-site in New Delhi, Kritika's studio contains works shaped through <mark class="optical-term">dense layering, gestural mark-making, and direct sensory engagement.</mark> Figurative elements and fragments of text appear intermittently across these surfaces. The studio included unframed works on paper, studies taped to the walls, and drawings spread across worktables. Across these works, colour relationships unfold through unconventional materials, drawing attention to optical conditions such as <mark class="optical-term">density, opacity, glare, and chromatic tension.</mark>
+
+        <div class="deck-container">
+            <input type="radio" name="deck-group" id="slide-2" checked class="deck-radio" aria-label="View artwork 2">
+            <input type="radio" name="deck-group" id="slide-1" class="deck-radio" aria-label="View artwork 1">
+            <input type="radio" name="deck-group" id="slide-5" class="deck-radio" aria-label="View artwork 5">
+            <input type="radio" name="deck-group" id="slide-4" class="deck-radio" aria-label="View artwork 4">
+
+            <div class="stack-wrapper">
+                <div class="layer card-1">
+                    <img src="sideview-compt.jpeg" alt="Studio image 5" loading="eager">
+                </div>
+                <div class="layer card-5">
+                    <img src="kritika-profile1.jpg" alt="Studio image 4" loading="eager">
+                </div>
+                <div class="layer card-2">
+                    <img src="sketchbook.jpg" alt="Studio image 1" loading="eager">
+                </div>
+                <div class="layer card-4">
+                    <img src="pin-blanket.jpeg" alt="Studio image 2" loading="eager">
+                </div>
+            </div>
+
+            <div class="art-info-row">
+                <input type="checkbox" id="art-info-toggle" class="art-info-checkbox" aria-label="Artwork details">
+                <label for="art-info-toggle" class="art-info-btn" aria-label="Toggle work details"></label>
+
+
+                <div class="art-info-box">
+      <div class="art-item info-1">
+          <p class="art-meta"><strong>Detail of <em>If Only I Could Find Myself</em>, 2023</strong> · 
+           <br> 55 × 71 inches</p>
+        <p class="art-desc">Solid Marker and Paint Pen on Paper. Artist's collection, New Delhi.</p>
+        </div>
+
+      <div class="art-item info-2">
+          <p class="art-meta"><strong>Field Record</strong> · 04.02.2026, New Delhi</p>
+          <p class="art-desc">Kritika Goel and Shankar Tripathi reviewing artist's Gelly Roller Ink drawings in studio.</p>
+          </div>
+
+      <div class="art-item info-4">
+          <p class="art-meta"><strong>Install Shot of <em>Baggage of Wealth III</em>, 2024</strong>· 
+            <br> 34 × 70 inches.</p>
+          <p class="art-desc">Thumb Pins and Adhesive Glue on Cotton Mattress. Artist's Collection, New Delhi.
+            Documentation Courtesy of Artist.
+          </p>
+      </div>
+
+      <div class="art-item info-5">
+          <p class="art-meta"><strong>Field Record</strong> · 04.02.2026, New Delhi</p>
+          <p class="art-desc">Kritika Goel reviewing her unframed practice charcoal drawings in studio.</p>
+      </div>
+  </div>
+
+            </div>
+        </div>
+
+        <p class="reading-block block-2">
+          In conversation, Kritika described nothingness not as absence but as an active ground for self-formation. She spoke of her practice as an <mark class="optical-term"> ongoing navigation between meaninglessness and meaning-making.</mark> Looking at the works in the studio, I added that this process appeared closely tied to <mark class="optical-term">questions of personhood:a way of anchoring and relating to self in real time through the construction of meaning on one's own terms.</mark>. Rather than relying on fixed frameworks or inherited meanings, the sensory conditions constructed on the surface become a site of testing and orientation. Attentiveness to resonance and dissonance takes material form through colour, texture, and mark-making.
+        </p>
+
+        <p class="reading-block block-3">
+          Fluorescent Gelly Roll inks, industrial markers, translucent glass stains on silvered looking glass, and micro-prismatic retro-reflective tape each contribute distinct optical effects. These materials are valued not only for their practical applications but also for how they shape perception. Glass stains create an illusion of depth, while retro-reflective tape returns light directly to its source, producing shifts in visibility and glare. Across a broader practice that includes installation and digital media,<mark class="optical-term"> a consistent concern remains: how states of distance, resonance, or misalignment can be held without requiring resolution.</mark> In this context, materials do more than support an image. They increasingly determine the conditions through which the work is encountered.
+        </p>
+        </section>
+
+    <section class="box-closeup">
+        <div class="closeup-container">
+            <img src="closeup.jpg" alt="Artwork closeup" loading="lazy">
+        </div>
+
+        <div class="closeup-text">
+            <p>
+                Across the surfaces documented on-site, material behavior operates as primary evidence rather than passive support. Pairing the tactile friction of hand mark-making with the synthetic sheen of industrial finishes, these works allow colour, surface reflection, and shifting studio light to govern the visual record—making the physical conditions of viewing inseparable from what is documented.
+
+            </p>
+        </div>
+
+        <div class="closeup-credits">
+            <span class="credit-left">ARTWORKS COURTESY © KRITIKA GOEL</span>
+            <span class="credit-right">DESIGN, DOCUMENTATION &amp; CODE © NOOR GUPTA.</span>
+        </div>
+    </section>
+
+</div>
+
+<script>
     
-  .closeup-credits{
-    max-width:none;
+(() => {
+  'use strict';
+
+  /* [ARCH 1] Zero-flicker 5:4 cuboid controller.
+     Cuboid + 3 captions run on ONE shared clock: same duration, easing,
+     startTime, and the same observer / visibility / reduced-motion lifecycle. */
+  const heroClip = document.querySelector('.clipping-container1');
+  const heroPivot = heroClip && heroClip.querySelector('.cuboid-pivot');
+  const faceFront = heroPivot && heroPivot.querySelector('.face-front');
+  const faceRight = heroPivot && heroPivot.querySelector('.face-right');
+  const faceBack  = heroPivot && heroPivot.querySelector('.face-back');
+  const caps = [...document.querySelectorAll('.cap-1, .cap-2, .cap-3')]; /* DOM order = cap-1, cap-2, cap-3 */
+
+  if (heroClip && heroPivot && faceFront && faceRight && faceBack && typeof heroPivot.animate === 'function') {
+    const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let anims = [];            /* [cuboid, cap-1, cap-2, cap-3] */
+    let lastW = 0;
+    let isVisible = true;
+
+    const CLOCK = {
+      duration: 6000,
+      easing: 'cubic-bezier(0.45, 0, 0.55, 1)',
+      iterations: Infinity,
+      direction: 'alternate'
+    };
+
+    /* Front 0deg + back -180deg hold 1.44s across the turnaround; middle -90deg holds 1.80s */
+    const getFrames = (half) => ([
+      { offset: 0,    transform: `translate3d(0,0,-${half}px) rotateY(0deg)` },
+      { offset: 0.12, transform: `translate3d(0,0,-${half}px) rotateY(0deg)` },
+      { offset: 0.35, transform: `translate3d(0,0,-${half}px) rotateY(-90deg)` },
+      { offset: 0.65, transform: `translate3d(0,0,-${half}px) rotateY(-90deg)` },
+      { offset: 0.88, transform: `translate3d(0,0,-${half}px) rotateY(-180deg)` },
+      { offset: 1,    transform: `translate3d(0,0,-${half}px) rotateY(-180deg)` }
+    ]);
+
+    const capFrames = [
+      [{ offset: 0, opacity: 1 }, { offset: 0.12, opacity: 1 }, { offset: 0.35, opacity: 0 }, { offset: 1, opacity: 0 }],
+      [{ offset: 0, opacity: 0 }, { offset: 0.12, opacity: 0 }, { offset: 0.35, opacity: 1 }, { offset: 0.65, opacity: 1 }, { offset: 0.88, opacity: 0 }, { offset: 1, opacity: 0 }],
+      [{ offset: 0, opacity: 0 }, { offset: 0.65, opacity: 0 }, { offset: 0.88, opacity: 1 }, { offset: 1, opacity: 1 }]
+    ];
+
+    const setPlaying = (on) => anims.forEach((a) => (on ? a.play() : a.pause()));
+
+    const syncGeometry = () => {
+      if (motion.matches) return;
+      const w = heroClip.getBoundingClientRect().width;
+      if (!w || Math.abs(w - lastW) < 0.25) return;
+      lastW = w;
+
+      const half = w / 2;
+      const seamSafeHalf = Math.max(0, half - 0.5);
+
+      faceFront.style.transform = `rotateY(0deg) translateZ(${seamSafeHalf}px)`;
+      faceRight.style.transform = `rotateY(90deg) translateZ(${seamSafeHalf}px)`;
+      faceBack.style.transform  = `rotateY(180deg) translateZ(${seamSafeHalf}px)`;
+
+      if (!anims.length) {
+        anims = [
+          heroPivot.animate(getFrames(half), CLOCK),
+          ...caps.map((el, i) => el.animate(capFrames[i], CLOCK))
+        ];
+        const t0 = document.timeline.currentTime;
+        anims.forEach((a) => { a.startTime = t0; });
+        if (document.hidden || !isVisible) setPlaying(false);
+      } else if (anims[0].effect && typeof anims[0].effect.setKeyframes === 'function') {
+        anims[0].effect.setKeyframes(getFrames(half));
+      }
+    };
+
+    const applyMotion = () => {
+      if (motion.matches) {
+        anims.forEach((a) => a.cancel());
+        anims = [];
+        lastW = 0;
+        heroPivot.style.transform = 'none';
+        faceFront.style.transform = 'none';
+        faceRight.style.display = 'none';
+        faceBack.style.display  = 'none';
+      } else {
+        heroPivot.style.transform = '';
+        faceRight.style.display = '';
+        faceBack.style.display  = '';
+        syncGeometry();
+      }
+    };
+
+    applyMotion();
+
+    if ('ResizeObserver' in window) {
+      new ResizeObserver(() => {
+        requestAnimationFrame(syncGeometry);
+      }).observe(heroClip);
+    } else {
+      window.addEventListener('resize', () => requestAnimationFrame(syncGeometry), { passive: true });
+    }
+
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(([entry]) => {
+        isVisible = entry.isIntersecting;
+        if (!anims.length || document.hidden) return;
+        setPlaying(isVisible);
+      }, { threshold: 0.05 }).observe(heroClip);
+    }
+
+    document.addEventListener('visibilitychange', () => {
+      if (!anims.length) return;
+      setPlaying(!(document.hidden || !isVisible));
+    });
+
+    if (motion.addEventListener) motion.addEventListener('change', applyMotion);
+    else if (motion.addListener) motion.addListener(applyMotion);
   }
-}
 
-/* =========================================================
-   8. DESKTOP  (min-width: 1025px)
-   ========================================================= */
-@media (min-width:1025px){
+  /* [ARCH 5] Global card-deck click-to-advance */
+  const deck = document.querySelector('.deck-container');
+  if (deck) {
+    const order = ['slide-2', 'slide-1', 'slide-5', 'slide-4'];
+    const radios = order.map((id) => document.getElementById(id)).filter(Boolean);
+    if (radios.length) {
+      let idx = Math.max(0, radios.findIndex((r) => r.checked));
 
-  :root{
-    --fs-question:clamp(3.15rem, 5vw, 4.15rem);
-    --ls-question:-.012em;
+      deck.addEventListener('change', (e) => {
+        const i = radios.indexOf(e.target);
+        if (i > -1) idx = i;
+      });
 
-    --fs-subtitle:clamp(1.16rem, 1.38vw, 1.28rem);
-    --fs-text:clamp(1.02rem, 1.2vw, 1.12rem);
-    --lh-text:1.3;
-    --fs-bio:clamp(0.84rem, 1.05vw, 0.92rem);
-    --lh-bio:1.26;
-    --fs-meta:clamp(0.64rem, 0.78vw, 0.72rem);
-
-    --closeup-h:clamp(27.5rem, 39vw, 37.5rem);
-
-    /* Stack roles — desktop: horizontal fan */
-    --stack-front:translate(0,0) scale(1.3) rotate(0.7deg);
-    --stack-right:translateX(10%) scale(1.2) rotate(5deg);
-    --stack-left:translateX(-10%) scale(1.2) rotate(-4deg);
-    --stack-back:translateY(6%) scale(1.2) rotate(3deg);
+      deck.addEventListener('click', (e) => {
+        if (e.target.closest('.deck-radio, .art-info-row')) return;
+        idx = (idx + 1) % radios.length;
+        radios[idx].checked = true;
+        radios[idx].dispatchEvent(new Event('change', { bubbles: true }));
+      });
+    }
   }
 
-  #header-left{ font-weight:500; }
+  /* [ARCH 4] Closeup hover pan */
+  const stage = document.querySelector('.box-closeup');
+  const frame = stage && stage.querySelector('.closeup-container');
+  if (!stage || !frame) return;
 
-  .image2-full{
-    justify-content:space-between;
-    padding:0 0 0 var(--page-gutter);
-  }
+  const MAX_LIFT = 3.5;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-  #detail{
-    justify-content:space-between;
-  }
+  let raf = 0;
+  let target = 0;
 
-  .question{
-    display:block;
-    width:100%;
-    text-align:justify;
-    text-align-last:left;
-    hyphens:none;
-    -webkit-hyphens:none;
-    text-justify:inter-character;
-  }
+  const paint = () => {
+    raf = 0;
+    frame.style.setProperty('--hover-pan', target.toFixed(2) + '%');
+  };
 
-  /* Essay */
-  .boxabout-visit{
-    margin-top:0.8%;
-    row-gap:0.12rem;
-  }
+  const set = (value) => {
+    target = value;
+    if (!raf) raf = requestAnimationFrame(paint);
+  };
 
-  .reading-block{
-    max-width:none;
-    width:100%;
-    color:var(--slate);
-  }
+  const rest = () => {
+    if (raf) { cancelAnimationFrame(raf); raf = 0; }
+    target = 0;
+    frame.style.setProperty('--hover-pan', '0%');
+  };
 
-  .block-2,
-  .block-3{
-    max-width:95%;
-  }
+  stage.addEventListener('pointermove', (e) => {
+    if (reduce.matches || e.pointerType === 'touch') return;
+    const r = frame.getBoundingClientRect();
+    if (!r.height) return;
+    const t = Math.min(1, Math.max(0, (e.clientY - r.top) / r.height));
+    set(t * MAX_LIFT);
+  }, { passive: true });
 
-  .stack-wrapper{ /* [ARCH 2] [ARCH 3] */
-    margin-block:calc(var(--stack-w) * 0.16);
-    margin-left:calc(var(--stack-w) * 0.02);
-  }
+  stage.addEventListener('pointerleave', rest, { passive: true });
+  stage.addEventListener('pointercancel', rest, { passive: true });
 
-  /* Front card is scale(1.3) about its centre, so its visual left edge sits
-     at stack-left - 0.15w. With the wrapper's 0.02w margin that is -0.13w
-     from the column edge. The row spans the print's visual width and is
-     capped so its right edge never passes --stack-col. */
-  .art-info-row{ /* [ARCH 3] */
-    width:min(calc(var(--stack-w) * 1.3), calc(100% + var(--stack-w) * 0.13));
-    margin-top:calc(var(--stack-w) * 0.36);
-    margin-left:calc(var(--stack-w) * -0.13);
-  }
-  .art-info-row:has(#art-info-toggle:checked){
-    margin-top:calc(var(--stack-w) * 0.42);
-  }
+  const onMotionChange = () => { if (reduce.matches) rest(); };
+  if (reduce.addEventListener) reduce.addEventListener('change', onMotionChange);
+  else if (reduce.addListener) reduce.addListener(onMotionChange);
+})();
 
-}
+</script>
 
-/* =========================================================
-   9. REDUCED MOTION
-   ========================================================= */
-@media (prefers-reduced-motion:reduce){
-  .reading-block,
-  .closeup-container > img{ animation:none; }
-  .closeup-container > img{ translate:none; transition:none; }
-  .stack-wrapper .layer{ transition:none; }
-  .cap-face{ animation:none; }
-  .cap-1{ opacity:1; }
-
-  .face-right,
-  .face-back,
-  .mobile-face-title{ display:none; }
-  .face-front{ transform:none; }
-  .cuboid-pivot{ animation:none; }
-  #header-left{ opacity:1; }
-}
-
-
-/* =========================================================
-   10. GSAP HANDOFF (Zero layout/box-model changes)
-   Every rule here is scoped to html.js-gsap, which animations.js adds
-   only while GSAP is running (and removes on teardown / reduced motion).
-   ========================================================= */
-html.js-gsap .stack-wrapper .layer img{
-  will-change:transform;
-}
-
-.header-subtitle,
-#detail span{
-  pointer-events:auto;
-}
-
-/* .question ink-rise: GSAP animates --ink-rise, this paints it.
-   Browsers without background-clip:text keep the solid var(--ink). */
-@supports ((background-clip:text) or (-webkit-background-clip:text)){
-  html.js-gsap .question{
-    background-image:linear-gradient(
-      to top,
-      var(--blue) 0%,
-      var(--blue) var(--ink-rise),
-      var(--ink) calc(var(--ink-rise) + 20%),
-      var(--ink) 100%
-    );
-    background-size:100% 100%;
-    background-repeat:no-repeat;
-    -webkit-background-clip:text;
-    background-clip:text;
-    color:transparent;
-    -webkit-text-fill-color:transparent;
-    animation:none;
-  }
-}
+<script src="./gsap.min.js" defer></script>
+<script src="./ScrollTrigger.min.js" defer></script>
+<script src="./animations.js" defer></script>
+</body>
+</html>
