@@ -32,7 +32,7 @@
   --fs-hero:clamp(2.275rem, 11.6vw, 4.375rem);
   --fs-question:clamp(1.85rem, 8vw, 3.15rem);
   --lh-question:1.02;
-  --ls-question:-.034em;
+  --ls-question:-.036em;
 
   /* Type: tier 2 (body) */
   --fs-text:clamp(0.86rem, 2.5vw, 1.0rem);
@@ -162,8 +162,8 @@ body{
   letter-spacing:.06em;
   line-height:1.2;
   white-space: nowrap;
-  text-align: justify;
-  text-align-last: justify;
+  text-align: justify; 
+  text-align-last:justify;
 }
 
 #detail{
@@ -361,17 +361,18 @@ body{
 .question{
   display:block;
   width:100%;
-  margin:0 0 .9em;
-  padding:0;
+  margin:0 0 calc(.9em - 0.15em); /* Compensates for the bottom padding */
+  padding:0 0 0.15em;              /* Gives descenders room inside the clip box */
   font-size:var(--fs-question);
   font-weight:400;
   line-height:var(--lh-question);
   letter-spacing:var(--ls-question);
-  text-align:justify;
+  text-align:justify; text-justify:distribute;
   hyphens:none;
   -webkit-hyphens:none;
   color:var(--ink);
 }
+
 
 @supports (animation-timeline:view()){
   .reading-block{
@@ -1070,8 +1071,8 @@ html.js-gsap .stack-wrapper .layer img{
     background-image:linear-gradient(
       to top,
       var(--blue) 0%,
-      var(--blue) var(--ink-rise),
-      var(--ink) calc(var(--ink-rise) + 20%),
+      var(--blue) calc(0.15em + var(--ink-rise)),
+      var(--ink) calc(0.15em + var(--ink-rise) + 1.5%),
       var(--ink) 100%
     );
     background-size:100% 100%;
