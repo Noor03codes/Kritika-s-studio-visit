@@ -157,7 +157,7 @@ body{
   left:var(--page-gutter);
   right: var(--page-gutter);
   margin-left:0rem;
-  font-size:clamp(0.75rem, 4.25cqw, 1.25rem);
+  font-size:clamp(0.75rem, 4.1cqw, 1.25rem);
   font-weight:500;
   letter-spacing:.06em;
   line-height:1.2;
