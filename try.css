@@ -431,7 +431,7 @@ body{
   width:45%;
   min-width:0;
   margin:clamp(.55rem,2vw,.9rem) 0 .85rem clamp(1rem,4vw,1.4rem);
-  padding:1.4rem 0 0;
+  padding:1.8rem 0 0;
 }
 
 .stack-wrapper{
@@ -887,7 +887,7 @@ body{
 
     .stack-wrapper{ /* [ARCH 2] [ARCH 3] */
     width:var(--stack-w);
-    margin-top:calc(var(--stack-w) * 0.08);
+    margin-top:calc(var(--stack-w) * 0.09);
     margin-right:auto;
     margin-bottom:calc(var(--stack-w) * 0.36);
     margin-left:calc(var(--stack-w) * 0.02);
@@ -1011,7 +1011,7 @@ body{
   }
 
   .stack-wrapper{ /* [ARCH 2] [ARCH 3] */
-    margin-block:calc(var(--stack-w) * 0.16);
+    margin-block:calc(var(--stack-w) * 0.24);
     margin-left:calc(var(--stack-w) * 0.02);
   }
 
