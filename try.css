@@ -15,7 +15,9 @@
   --crimson: #8A152B;
   --panel: var(--blue);
   --slate: var(--blue);
-  --pink: #d05a7d;
+  --pink:   #c76a86;
+
+/*  #d05a7d;*/
   --grey: #4f4f4f;
   --meta-minor: var(--grey);
 
@@ -45,6 +47,8 @@
   --lh-bio:1.26;
   --track-meta:.1em;
   --fs-credit:clamp(0.45rem, 0.36rem + 0.32vw, 0.65rem);
+  --paper-tex:url("paper3.jpg");
+
 
   /* Stack roles — mobile: vertical cascade */
   --stack-front:translateY(0) scale(1.12) rotate(0deg);
@@ -66,6 +70,7 @@
 *{
   box-sizing:border-box;
   margin:0;
+  -webkit-tap-highlight-color:transparent;
 }
 
 html{
@@ -101,11 +106,27 @@ body{
     [content-end] var(--page-gutter)
     [full-end];
   width:100%;
+  background-color:var(--paper);
+  background-image:var(--paper-tex);
+  background-position:center calc(var(--space-section) * -2);
+  background-repeat:repeat-y;
+  background-size:100% auto;
 }
+
 
 .grid-container img{
   display:block;
   max-width:100%;
+}
+
+/* No text selection / tap highlight on interactive display elements */
+.deck-container,
+.stack-wrapper,
+.art-info-btn,
+.header-subtitle,
+#detail{
+  user-select:none;
+  -webkit-user-select:none;
 }
 
 /* ---------- Keyframes ---------- */
@@ -211,7 +232,10 @@ body{
 }
 
 @media (max-width:767px){
-  #header-left{ opacity:0; }
+  #header-left{
+    top:calc(71.4286vw - 1em - (1.8rem - var(--header-gap)));
+    bottom:auto;
+  }
   .main-image{
     background:linear-gradient(to bottom, var(--ink) 55%, transparent 55%);
   }
@@ -300,27 +324,11 @@ body{
   }
 }
 
-.mobile-face-title{
-  position:absolute;
-  inset-inline:0;
-  bottom:calc(1.8rem - var(--header-gap));
-  z-index:1;
-  text-align:center;
-  font-size:var(--fs-hero);
-  font-weight:400;
-  line-height:1;
-  letter-spacing:.01em;
-  white-space:nowrap;
-  color:var(--paper);
-  pointer-events:none;
-}
-
 @media (min-width:768px){
   .main-image{
     padding-block:var(--space-block);
     margin-block:calc(var(--space-block) * -1);
   }
-  .mobile-face-title{ display:none; }
   .cuboid-caption{
     margin-top:0.45rem;
     padding-inline:0;
@@ -367,7 +375,10 @@ body{
   font-weight:400;
   line-height:var(--lh-question);
   letter-spacing:var(--ls-question);
-  text-align:justify; text-justify:distribute;
+  text-align:justify;
+  text-align-last:left;
+  text-wrap: pretty;
+  text-justify:inter-word;
   hyphens:none;
   -webkit-hyphens:none;
   color:var(--ink);
@@ -426,6 +437,7 @@ body{
    ========================================================= */
 .deck-container{
   position:relative;
+  z-index:5;
   contain:layout style;
   float:right;
   width:45%;
@@ -437,6 +449,7 @@ body{
 .stack-wrapper{
   position:relative;
   isolation:isolate;
+  pointer-events:none;
   width:94%;
   margin-top:7%;
   margin-left:auto;
@@ -556,6 +569,7 @@ body{
   text-transform:uppercase;
   line-height:1.2;
   cursor:pointer;
+  pointer-events:auto;
   user-select:none;
 }
 
@@ -742,7 +756,6 @@ body{
     grid-template-rows:auto auto auto auto;
     align-items:start;
     padding-top:clamp(1.06rem, 2.25vw, 2rem);
-    background:var(--paper);
   }
 
   /* ---------- Header: two tracks, left/right ---------- */
@@ -770,6 +783,11 @@ body{
     font-weight:400;
     color:var(--ink);
     pointer-events:auto;
+  }
+
+  #header-left{
+    mix-blend-mode:multiply;
+    opacity:0.88;
   }
 
   .header-subtitle,
@@ -833,6 +851,8 @@ body{
     margin:0;
     text-align:justify;
     text-align-last:left;
+    text-wrap: pretty;
+    text-justify:inter-word;
   }
 
   .image2-full .bio-text{
@@ -928,11 +948,11 @@ body{
 
   .art-info-box .art-meta{
     margin:0 0 .2rem;
-    font-size:.66rem;
+    font-size:.76rem;
   }
 
   .art-info-box .art-desc{
-    font-size:.61rem;
+    font-size:.74rem; letter-spacing: 0.03em;
     line-height:1.38;
   }
 
@@ -988,9 +1008,10 @@ body{
     width:100%;
     text-align:justify;
     text-align-last:left;
+    text-wrap: pretty;
     hyphens:none;
     -webkit-hyphens:none;
-    text-justify:inter-character;
+    text-justify:inter-word;
   }
 
   /* Essay */
@@ -1042,11 +1063,9 @@ body{
   .cap-1{ opacity:1; }
 
   .face-right,
-  .face-back,
-  .mobile-face-title{ display:none; }
+  .face-back{ display:none; }
   .face-front{ transform:none; }
   .cuboid-pivot{ animation:none; }
-  #header-left{ opacity:1; }
 }
 
 
@@ -1083,4 +1102,91 @@ html.js-gsap .stack-wrapper .layer img{
     -webkit-text-fill-color:transparent;
     animation:none;
   }
+}
+
+/* =========================================================
+   11. MULTI-SUBSTRATE PRINT, VELLUM & OVER-SURFACE INTEGRATION
+   ========================================================= */
+
+/* 1. Anchor .grid-container for the continuous over-surface paper layer */
+.grid-container{
+  position:relative;
+  background-color:var(--paper);
+  background-image:var(--paper-tex);
+  background-position:center calc(var(--space-section) * -1);
+  background-repeat:repeat-y;
+  background-size:100% auto;
+}
+
+/* 2. Continuous physical paper-tooth & fold-light layer OVER the entire page
+      Unifies margins, ink, and photos as one sheet without whitewash or jadedness */
+.grid-container::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:90;
+  pointer-events:none;
+  background-image:var(--paper-tex);
+  background-position:center calc(var(--space-section) * -1);
+  background-repeat:repeat-y;
+  background-size:100% auto;
+  mix-blend-mode:multiply;
+  filter:contrast(1.3) brightness(1.03);
+  opacity:0.34;
+}
+
+/* 3. Rich, punchy pigment ink + subtle letterpress deboss highlight catch */
+.header-subtitle,
+#detail,
+.cuboid-caption,
+.bio-text,
+.reading-block,
+.art-info-btn{
+  mix-blend-mode:multiply;
+  opacity:1;
+  filter:url(#ink-bleed) saturate(1.14) contrast(1.06);
+  text-shadow:0 0.5px 0 rgba(255, 255, 255, 0.5);
+}
+
+@media (min-width:768px){
+  #header-left{
+    mix-blend-mode:multiply;
+    opacity:1;
+    filter:url(#ink-bleed) saturate(1.12) contrast(1.05);
+    text-shadow:0 0.5px 0 rgba(255, 255, 255, 0.55);
+  }
+}
+
+.question{
+  opacity:1;
+  filter:url(#ink-bleed) saturate(1.14) contrast(1.06);
+}
+
+/* 4. Vibrant, rich photographic plates + crisp 1px tipped-in print edge */
+.image1,
+.stack-wrapper .layer img,
+.closeup-container > img{
+  filter:url(#ink-bleed) contrast(1.06) saturate(1.1);
+}
+
+.hero-face,
+.stack-wrapper .layer{
+  outline:1px solid color-mix(in srgb, var(--ink) 14%, transparent);
+  outline-offset:-1px;
+}
+
+/* 5. Translucent vellum / archival plate finish on info & closeup panels */
+.art-info-box,
+.closeup-text{
+  background:color-mix(in srgb, var(--blue) 93%, transparent);
+  backdrop-filter:blur(2px);
+  -webkit-backdrop-filter:blur(2px);
+  outline:1px solid color-mix(in srgb, var(--paper) 20%, transparent);
+  outline-offset:-1px;
+  filter:url(#ink-bleed) saturate(1.1) contrast(1.04);
+}
+
+.closeup-text p,
+.closeup-credits span{
+  filter:url(#ink-bleed);
 }
