@@ -10,6 +10,24 @@
 
 <body>
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="ink-bleed" x="-3%" y="-3%" width="106%" height="106%" color-interpolation-filters="sRGB">
+    <!-- Fine cotton-paper fiber noise -->
+    <feTurbulence type="fractalNoise" baseFrequency="0.72" numOctaves="4" seed="7" result="paperTooth"/>
+    
+    <!-- 1. Micro-capillary bleed: slightly thickens & softens ink edges into fibers -->
+    <feMorphology in="SourceGraphic" operator="dilate" radius="0.22" result="spread"/>
+    <feGaussianBlur in="spread" stdDeviation="0.32" result="softInk"/>
+    
+    <!-- 2. Irregular fiber wicking along glyph perimeter (low scale = zero letter warping) -->
+    <feDisplacementMap in="softInk" in2="paperTooth" scale="0.95" xChannelSelector="R" yChannelSelector="G" result="wickedEdge"/>
+    
+    <!-- 3. Subtle paper-tooth pinholes inside solid ink fills -->
+    <feColorMatrix in="paperTooth" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 -0.28 1.08" result="fiberPores"/>
+    <feComposite in="wickedEdge" in2="fiberPores" operator="in"/>
+  </filter>
+</svg>
+
 <div class="grid-container">
 
  <header class="box-header">
@@ -22,13 +40,12 @@
             FIELD OBSERVATION & MATERIAL RECORD
         </p>
     </header>
-    
+
        <section class="main-image">
         <div class="clipping-container1">
             <div class="cuboid-pivot">
                 <figure class="hero-face face-front">
                     <img class="image1" src="work-her.jpeg" alt="Kritika in studio" fetchpriority="high" decoding="async">
-                    <span class="mobile-face-title" aria-hidden="true">KRITIKA GOEL</span>
                 </figure>
                 <figure class="hero-face face-right">
                     <img class="image1" src="plant-work.jpeg" alt="Kritika in studio, second view" loading="eager" decoding="async">
@@ -45,14 +62,9 @@
                     <strong> FIG. 02/03 · Field Record ·</strong>&nbsp; Kritika Goel and Shankar Tripathi in studio, New Delhi</span>
 
                   <span class="cap-face cap-3">
-                    <strong>FIG. 03/03 ·</strong>&nbsp; Detail of <em>Inside New Studio</em>, 2024 · Reflective Tape on Paper· 4 x 6 inches. Artist's Collection, New Delhi. Documentation Courtesy of Artist.</span>
+                    <strong>FIG. 03/03 ·</strong>&nbsp; Detail of <em>Inside New Studio</em>, 2024 · Reflective Tape on Paper· 4 x 6 in. Artist's Collection, New Delhi. Documentation Courtesy of Artist.</span>
               </div>
-
-
     </section>
-
-
-
 
     <section class="image2-full">
         <p class="question">
